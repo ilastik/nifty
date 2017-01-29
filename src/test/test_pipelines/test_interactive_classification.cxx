@@ -15,8 +15,6 @@ BOOST_AUTO_TEST_CASE(InteractiveClassificationTest)
     using in_data_type = uint8_t;
     using float_array = nifty::marray::Marray<data_type>;
     using float_array_view = nifty::marray::View<data_type>;
-    using prediction_cache = tbb::concurrent_lru_cache<size_t, float_array_view, std::function<float_array_view(size_t)>>;
-    using feature_cache = tbb::concurrent_lru_cache<size_t, float_array_view, std::function<float_array_view(size_t)>>;
     constexpr size_t max_num_entries = 100;
     using raw_cache = Hdf5Input<in_data_type, dim, false, in_data_type>;
     using coordinate = nifty::array::StaticArray<int64_t, dim>;
@@ -61,9 +59,12 @@ BOOST_AUTO_TEST_CASE(InteractiveClassificationTest)
 
     std::string out_filename = "./out.h5";
     std::string out_key = "data";
+    std::vector<std::string> label_block_files = {}; // TODO add some files!
+    std::string label_block_key = "data";
 
     interactive_classification_task<dim>& interactive_training = *new(tbb::task::allocate_root()) interactive_classification_task<dim>(
             raw_file, raw_key,
+            label_block_files, label_block_key,
             rf_filename, rf_path,
             out_filename, out_key,
             selected_features,

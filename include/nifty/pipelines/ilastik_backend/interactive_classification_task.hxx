@@ -4,6 +4,8 @@
 #include "nifty/pipelines/ilastik_backend/random_forest_prediction.hxx"
 #include "nifty/pipelines/ilastik_backend/random_forest_training.hxx"
 #include "nifty/pipelines/ilastik_backend/random_forest_loader.hxx"
+#include "nifty/pipelines/ilastik_backend/cached_prediction_task.hxx"
+#include "nifty/pipelines/ilastik_backend/random_forest_training_task.hxx"
 
 #include <tbb/tbb.h>
 #define TBB_PREVIEW_CONCURRENT_LRU_CACHE 1
@@ -40,6 +42,8 @@ namespace ilastik_backend{
         // construct batch prediction for single input
         interactive_classification_task(const std::string & in_file,
                 const std::string & in_key,
+                const std::vector<std::string> & label_block_filenames,
+                const std::string & label_block_key,
                 const std::string & rf_file,
                 const std::string & rf_key,
                 const std::string & out_file,
@@ -51,17 +55,17 @@ namespace ilastik_backend{
                 const coordinate & roiEnd) :
             blocking_(),
             in_key_(in_key),
+            label_block_filenames_(label_block_filenames),
+            label_block_key_(label_block_key),
             rfFile_(rf_file),
             rfKey_(rf_key),
             rawHandle_(hdf5::openFile(in_file)),
-            outHandle_(hdf5::createFile(out_file)),
+            outFile_(out_file),
             outKey_(out_key),
             featureCache_(),
-            predictionCache_(),
             selectedFeatures_(selected_features),
             blockShape_(block_shape),
             maxNumCacheEntries_(max_num_cache_entries),
-            rf_(), // TODO we don't need this once we learn the rf
             roiBegin_(roiBegin),
             roiEnd_(roiEnd)
         {
@@ -77,7 +81,7 @@ namespace ilastik_backend{
             // TODO handle the roi shapes in python
             // init the blocking
             coordinate roiShape = roiEnd_ - roiBegin_;
-            blocking_ = std::make_unique<blocking>(roiBegin_, roiEnd_, blockShape_);
+            blocking_ = std::make_shared<blocking>(roiBegin_, roiEnd_, blockShape_);
 
             // init the feature cache
             std::function<float_array(size_t)> retrieve_features_for_caching = [this](size_t blockId) -> float_array {
@@ -130,86 +134,41 @@ namespace ilastik_backend{
             
             };
             
-            featureCache_ = std::make_unique<cache>(retrieve_features_for_caching, maxNumCacheEntries_);
-            
-            // TODO make rf single threaded
-            rf_ = get_rf2_from_file(rfFile_, rfKey_);
-            
-            nClasses_ = rf_.class_count();
-            
-            // init the prediction cache
-            std::function<float_array(size_t)> retrieve_prediction_for_caching = [this](size_t blockId) -> float_array {
-                
-                // predict the random forest
-                const auto & block = this->blocking_->getBlock(blockId);
-                const auto & blockShape = block.shape();
-                
-                multichan_coordinate predictionShape;
-                predictionShape[DIM] = nClasses_;
-                for(int d = 0; d < DIM; ++d)
-                    predictionShape[d] = blockShape[d];
-
-                // get the features from the feature cache
-                auto feature_handle = (*(this->featureCache_))[blockId];
-                auto feature_array = feature_handle.value();
-
-                float_array prediction_array(predictionShape.begin(), predictionShape.end());
-                random_forest2_prediction<DIM>(blockId, feature_array, prediction_array, this->rf_, 1);
-
-                return prediction_array;
-            };
-
-            predictionCache_ = std::make_unique<cache>(retrieve_prediction_for_caching, maxNumCacheEntries_);
-
-            // TODO learning cache
-
-            multichan_coordinate outShape, chunkShape; 
-            outShape[DIM] = this->nClasses_;
-            chunkShape[DIM] = 1;
-            for(int d = 0; d < DIM; ++d) {
-                outShape[d] = roiShape[d];
-                chunkShape[d] = blockShape_[d];
-            }
-            out_ = std::make_unique<hdf5::Hdf5Array<data_type>>( outHandle_, outKey_, outShape.begin(), outShape.end(), chunkShape.begin() );
+            featureCache_ = std::make_shared<cache>(retrieve_features_for_caching, maxNumCacheEntries_);
         }
-
-        //TODO request and block subtasks
-
 
         tbb::task* execute() {
             
-            std::cout << "batch_prediction_task::execute called" << std::endl;
+            std::cout << "interactive_classification_task::execute called" << std::endl;
             
             init();
             
-            // TODO FIXME why two loops ?!
-	        tbb::parallel_for(tbb::blocked_range<size_t>(0,blocking_->numberOfBlocks()), [this](const tbb::blocked_range<size_t> &range) {
-		    for( size_t blockId=range.begin(); blockId!=range.end(); ++blockId ) {
+            // FROM FUTURE IMPORT TODO: wait for incoming label blocks and start processing only once these are there
 
-                    std::cout << "Processing block " << blockId << " / " << blocking_->numberOfBlocks() << std::endl;
+            // start training task
+            random_forest_training_task<DIM>& random_forest_training = *new(tbb::task::allocate_child()) random_forest_training_task<DIM>(
+                label_block_filenames_, label_block_key_,
+                rfFile_, rfKey_,
+                selectedFeatures_,
+                blocking_,
+                featureCache_,
+                roiBegin_);
 
-                    auto handle = (*(this->predictionCache_))[blockId];
-                    auto outView = handle.value();
+            this->spawn_and_wait_for_all(random_forest_training);
+            
+            // once that is done, we can predict
+            cached_prediction_task<DIM>& cached_prediction = *new(tbb::task::allocate_child()) cached_prediction_task<DIM>(
+                rfFile_, rfKey_,
+                outFile_, outKey_,
+                blockShape_, maxNumCacheEntries_,
+                roiBegin_, roiEnd_,
+                blocking_,
+                featureCache_);
 
-                    auto block = blocking_->getBlock(blockId);
-                    coordinate blockBegin = block.begin() - roiBegin_;
-
-                    // need to attach the channel coordinate
-                    multichan_coordinate outBegin;
-                    for(int d = 0; d < DIM; ++d)
-                        outBegin[d] = blockBegin[d];
-                    outBegin[DIM] = 0;
-
-                    {
-		            std::lock_guard<std::mutex> lock(this->s_mutex);
-                    out_->writeSubarray(outBegin.begin(), outView);
-                    }
-		    }		
-	        });
+            this->spawn_and_wait_for_all(cached_prediction);
 
             // close the rawFile and outFile
             hdf5::closeFile(rawHandle_);
-            hdf5::closeFile(outHandle_);
 
             return NULL;
         }
@@ -218,24 +177,22 @@ namespace ilastik_backend{
     private:
 	    static std::mutex s_mutex;
         // global blocking
-        std::unique_ptr<blocking> blocking_;
+        std::shared_ptr<blocking> blocking_;
         std::unique_ptr<raw_cache> rawCache_;
         std::string in_key_;
         std::string rfFile_;
         std::string rfKey_;
         hid_t rawHandle_;
-        hid_t outHandle_;
         std::string outKey_;
-        std::unique_ptr<cache> featureCache_;
-        std::unique_ptr<cache> predictionCache_;
+        std::string outFile_;
+        std::shared_ptr<cache> featureCache_;
         selection_type selectedFeatures_;
         coordinate blockShape_;
         size_t maxNumCacheEntries_;
-        random_forest rf_;
-        std::unique_ptr<hdf5::Hdf5Array<data_type>> out_;
         coordinate roiBegin_;
         coordinate roiEnd_;
-        size_t nClasses_;
+        std::vector<std::string> label_block_filenames_;
+        std::string label_block_key_;
     };
     
     template <unsigned DIM>
