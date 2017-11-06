@@ -101,7 +101,7 @@ namespace graph{
         ragModule.def("getSkipEdgeLengths",
         [](
             const RAG & rag,
-            const std::vector<std::pair<size_t,size_t>> & skipEdges,
+            const std::vector<std::pair<uint64_t,uint64_t>> & skipEdges,
             const std::vector<size_t> & skipRanges,
             const std::vector<size_t> & skipStarts,
             const int numberOfThreads

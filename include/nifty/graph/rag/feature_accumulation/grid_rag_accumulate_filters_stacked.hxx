@@ -259,7 +259,7 @@ void accumulateEdgeFeaturesFromFiltersWithAccChain(
     uint64_t numberOfSlices = shape[0];
 
     Coord2 sliceShape2({shape[1], shape[2]});
-    Coord sliceShape3({1L, shape[1], shape[2]});
+    Coord sliceShape3({1LL, shape[1], shape[2]});
     Coord filterShape({int64_t(numberOfChannels), shape[1], shape[2]});
 
     // filter computation and accumulation
@@ -281,8 +281,8 @@ void accumulateEdgeFeaturesFromFiltersWithAccChain(
         //FilterBlockStorage dataCopyStorage(threadpool, sliceShape2, actualNumberOfThreads);
 
         // process slice 0 to find min and max for histogram opts
-        Coord begin0({0L, 0L, 0L});
-        Coord end0(  {1L, shape[1], shape[2]});
+        Coord begin0({0LL, 0LL, 0LL});
+        Coord end0(  {1LL, shape[1], shape[2]});
 
         auto data0 = dataStorage.getView(0);
         tools::readSubarray(data, begin0, end0, data0);
@@ -312,10 +312,10 @@ void accumulateEdgeFeaturesFromFiltersWithAccChain(
         //        true);
 
         std::vector<vigra::HistogramOptions> histoOptionsVec(numberOfChannels);
-        Coord cShape({1L,sliceShape2[0],sliceShape2[1]});
+        Coord cShape({1LL,sliceShape2[0],sliceShape2[1]});
         parallel::parallel_foreach(threadpool, numberOfChannels, [&](const int tid, const int64_t c){
             auto & histoOpts = histoOptionsVec[c];
-            Coord cBegin({c,0L,0L});
+            Coord cBegin({c,0LL,0LL});
             auto channelView = filter0.view(cBegin.begin(), cShape.begin());
             auto minMax = std::minmax_element(channelView.begin(), channelView.end());
             auto min = *(minMax.first);
@@ -340,7 +340,7 @@ void accumulateEdgeFeaturesFromFiltersWithAccChain(
             int64_t sliceIdB = slicePairs[pairId].second;// upper slice
 
             // compute the filters for slice A
-            Coord beginA ({sliceIdA, 0L, 0L});
+            Coord beginA ({sliceIdA, 0LL, 0LL});
             Coord endA({sliceIdA+1, shape[1], shape[2]});
 
             auto labelsA = labelsAStorage.getView(tid);
@@ -386,7 +386,7 @@ void accumulateEdgeFeaturesFromFiltersWithAccChain(
             }
 
             // process upper slice
-            Coord beginB = Coord({sliceIdB,   0L,       0L});
+            Coord beginB = Coord({sliceIdB,   0LL,       0LL});
             Coord endB   = Coord({sliceIdB+1, shape[1], shape[2]});
             auto filterB = filterBStorage.getView(tid);
             marray::View<LabelType> labelsBSqueezed;
@@ -523,8 +523,8 @@ void accumulateEdgeFeaturesFromFilters(
             }
         }
 
-        FeatCoord begin({int64_t(edgeOffset),0L});
-        FeatCoord end({edgeOffset+nEdges,nChannels*nStats});
+        FeatCoord begin({int64_t(edgeOffset),0LL});
+        FeatCoord end({edgeOffset+nEdges,uint64_t(nChannels*nStats)});
 
         tools::writeSubarray(edgeFeaturesOut, begin, end, featuresTemp);
     };
@@ -601,7 +601,7 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
     size_t numberOfChannels = applyFilters.numberOfChannels();
 
     Coord2 sliceShape2({shape[1], shape[2]});
-    Coord sliceShape3({1L,shape[1], shape[2]});
+    Coord sliceShape3({1LL,shape[1], shape[2]});
     Coord filterShape({int64_t(numberOfChannels), shape[1], shape[2]});
 
     // filter computation and accumulation
@@ -663,7 +663,7 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
             std::cout << countSlice++ << " / " << lowerSlices.size() << std::endl;
             std::cout << "Finding features for skip edges from slice " << sliceId << std::endl;
 
-            Coord beginA({int64_t(sliceId),0L,0L});
+            Coord beginA({int64_t(sliceId),0LL,0LL});
             Coord endA(  {int64_t(sliceId+1),shape[1],shape[2]});
             auto labelsA = labelsAStorage.getView(0);
             labelsProxy.readSubarray(beginA, endA, labelsA);
@@ -686,11 +686,11 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
 
             // set the correct histogram for each filter from lowest slice
             if(sliceId == lowest){
-                Coord cShape({1L,sliceShape2[0],sliceShape2[1]});
+                Coord cShape({1LL,sliceShape2[0],sliceShape2[1]});
                 parallel::parallel_foreach(threadpool, numberOfChannels, [&](const int tid, const int64_t c){
                     auto & histoOpts = histoOptionsVec[c];
 
-                    Coord cBegin({c,0L,0L});
+                    Coord cBegin({c,0LL,0LL});
                     auto channelView = filterA.view(cBegin.begin(), cShape.begin());
                     auto minMax = std::minmax_element(channelView.begin(), channelView.end());
                     auto min = *(minMax.first);
@@ -723,7 +723,7 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
             for(auto nextId : skipSlices[sliceId] ) {
                 std::cout << "to slice " << nextId << std::endl;
 
-                beginB = Coord({int64_t(nextId),0L,0L});
+                beginB = Coord({int64_t(nextId),0LL,0LL});
                 endB   = Coord({int64_t(nextId+1),shape[1],shape[2]});
 
                 auto labelsB = labelsBStorage.getView(0);
@@ -892,8 +892,8 @@ void accumulateSkipEdgeFeaturesFromFilters(
                 }
             });
 
-            FeatCoord begin({int64_t(edgeOffset),0L});
-            FeatCoord end({edgeOffset+nEdges,nChannels*nStats});
+            FeatCoord begin({int64_t(edgeOffset),0LL});
+            FeatCoord end({edgeOffset+nEdges,uint64_t(nChannels*nStats)});
 
             tools::writeSubarray(edgeFeaturesOut, begin, end, featuresTemp);
         },

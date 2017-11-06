@@ -139,7 +139,7 @@ void LongRangeAdjacency<LABELS>::initAdjacency(const LABELS & labels, const size
     // get the shape, number of slices and slice shapes
     const size_t nSlices = shape_[0];
     Coord2 sliceShape2({shape_[1], shape_[2]});
-    Coord sliceShape3({1L, shape_[1], shape_[2]});
+    Coord sliceShape3({1LL, shape_[1], shape_[2]});
 
     // threadpool and actual number of threads
     nifty::parallel::ThreadPool threadpool(numberOfThreads);
@@ -160,7 +160,7 @@ void LongRangeAdjacency<LABELS>::initAdjacency(const LABELS & labels, const size
             //std::cout << "Loop in " << slice << std::endl;
 
             // get segmentation in base slice
-            Coord beginA ({int64_t(slice), 0L, 0L});
+            Coord beginA ({int64_t(slice), 0LL, 0LL});
             Coord endA({int64_t(slice + 1), shape_[1], shape_[2]});
             auto labelsA = labelsAStorage.getView(tid);
             tools::readSubarray(labels, beginA, endA, labelsA);
@@ -197,7 +197,7 @@ void LongRangeAdjacency<LABELS>::initAdjacency(const LABELS & labels, const size
                 //std::cout << "to upper slice " << slice + z << std::endl;
 
                 // get upper segmentation
-                Coord beginB ({slice + z, 0L, 0L});
+                Coord beginB ({slice + z, 0LL, 0LL});
                 Coord endB({slice + z + 1, shape_[1], shape_[2]});
                 tools::readSubarray(labels, beginB, endB, labelsB);
                 auto labelsBSqueezed = labelsB.squeezedView();

@@ -120,7 +120,7 @@ namespace graph{
         [](
             const RAG & rag,
             DATA & data,
-            const std::vector<std::pair<size_t,size_t>> & skipEdges,
+            const std::vector<std::pair<uint64_t,uint64_t>> & skipEdges,
             const std::vector<size_t> & skipRanges,
             const std::vector<size_t> & skipStarts,
             const int zDirection,

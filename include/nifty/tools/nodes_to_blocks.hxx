@@ -30,7 +30,7 @@ namespace tools{
         out.resize(nBlocks);
 
         const auto & shape = segmentation.shape();
-        Coord sliceShape({1L,int64_t(shape[1]),int64_t(shape[2])});
+        Coord sliceShape({1LL,int64_t(shape[1]),int64_t(shape[2])});
 
         // thread data
         LabelsStorage labelsStorage(threadpool, sliceShape, nThreads);
@@ -45,7 +45,7 @@ namespace tools{
             auto & threadUniques = threadData[tid];
 
             // get subblocks in this slice
-            Coord sliceBegin({sliceId,0L,0L});
+            Coord sliceBegin({sliceId,0LL,0LL});
             std::vector<uint64_t> subBlocks;
             blocking.getBlockIdsInSlice(sliceId, internalHalo, subBlocks);
             
