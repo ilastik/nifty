@@ -66,19 +66,19 @@ requirements:
     - scipy
     - futures # [py2k]
 
-    {% if WITH_CPLEX is defined and WITH_CPLEX %}
+    {% if WITH_CPLEX is defined and WITH_CPLEX == "1" %}
     - cplex-shared # [not win]
     {% endif %}
 
-    {% if WITH_GUROBI is defined and WITH_GUROBI %}
+    {% if WITH_GUROBI is defined and WITH_GUROBI == "1" %}
     - gurobi-symlink # [not win]
     {% endif %}
 
 test:
-  {% if WITH_CPLEX %}
+  {% if WITH_CPLEX is defined and WITH_CPLEX == "1" %}
     imports:
       - nifty_with_cplex
-  {% elif WITH_GUROBI %}
+  {% elif WITH_GUROBI is defined and WITH_GUROBI == "1" %}
     imports:
       - nifty_with_gurobi
   {% else %}
