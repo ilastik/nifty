@@ -1,15 +1,15 @@
 {% if not WITH_CPLEX is defined %}
-  {% set WITH_CPLEX = False %}
+  {% set WITH_CPLEX = 0 %}
 {% endif %}
 
 {% if not WITH_GUROBI is defined %}
-  {% set WITH_GUROBI = False %}
+  {% set WITH_GUROBI = 0 %}
 {% endif %}
 
 package:
-  {% if WITH_CPLEX %}
+  {% if WITH_CPLEX == "1" %}
     name: nifty-with-cplex
-  {% elif WITH_GUROBI %}
+  {% elif WITH_GUROBI == "1" %}
     name: nifty-with-gurobi
   {% else %}
     name: nifty
@@ -47,13 +47,13 @@ requirements:
     - python {{PY_VER}}*
     - hdf5 1.8.17 # Need this version to be compatible with current vigra package
     - fastfilters
-    {% if WITH_CPLEX is defined and WITH_CPLEX %}
-    - cplex-shared # Need to make sure that cplex dylibs exist
+    {% if WITH_CPLEX is defined and WITH_CPLEX == "1" %}
+    - cplex-shared # [not win]
     {% endif %}
 
     # Must provide symlinks so that the conda doesn't complain when it 'fixes' linking in _nifty.so
-    {% if WITH_GUROBI is defined and WITH_GUROBI %}
-    - gurobi-symlink
+    {% if WITH_GUROBI is defined and WITH_GUROBI == "1" %}
+    - gurobi-symlink # [not win]
     {% endif %}
 
   run:
@@ -67,11 +67,11 @@ requirements:
     - futures # [py2k]
 
     {% if WITH_CPLEX is defined and WITH_CPLEX %}
-    - cplex-shared # Need to make sure that cplex dylibs exist
+    - cplex-shared # [not win]
     {% endif %}
 
     {% if WITH_GUROBI is defined and WITH_GUROBI %}
-    - gurobi-symlink
+    - gurobi-symlink # [not win]
     {% endif %}
 
 test:

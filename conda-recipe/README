@@ -11,10 +11,10 @@ Configure your environment to select the variant to build.
 Examples:
 
 # Build nifty
-conda build conda-recipe
+WITH_CPLEX=0 WITH_GUROBI=0 conda build conda-recipe
 
 # Build nifty-with-cplex
-WITH_CPLEX=1 CPLEX_ROOT_DIR=/path/to/ibm/ILOG/CPLEX_Studio1251 conda build conda-recipe
+WITH_CPLEX=1 WITH_GUROBI=0 CPLEX_ROOT_DIR=/path/to/ibm/ILOG/CPLEX_Studio1251 conda build conda-recipe
 
 # Build nifty-with-gurobi
-WITH_GUROBI=1 GUROBI_ROOT_DIR=/path/to/gurobi650/linux64 conda build conda-recipe
+WITH_CPLEX=0 WITH_GUROBI=1 GUROBI_ROOT_DIR=/path/to/gurobi650/linux64 conda build conda-recipe
