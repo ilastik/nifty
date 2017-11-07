@@ -33,7 +33,7 @@ namespace graph{
             for(int d = 0; d < 3; ++d) {
                 NIFTY_CHECK_OP(affinities.shape(d+1), ==, longRangeAdjacency.shape(d), "Wrong shape");
             }
-            size_t nStats = 9;
+            std::size_t nStats = 9;
             nifty::marray::PyView<float> features({longRangeAdjacency.numberOfEdges(), nStats});
             {
                 py::gil_scoped_release allowThreads;

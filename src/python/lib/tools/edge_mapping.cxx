@@ -19,7 +19,7 @@ namespace tools{
 
         typedef EdgeMapping<EdgeType, NodeType> MappingType;
         py::class_<MappingType>(toolsModule, "EdgeMapping")
-            .def(py::init<size_t>())
+            .def(py::init<std::size_t>())
 
             .def("initializeMapping",
                 [](MappingType & self, const marray::PyView<EdgeType> uvIds, const std::vector<NodeType> & oldToNewNodes) {
@@ -44,7 +44,7 @@ namespace tools{
             .def("getNewUvIds",
                 [](const MappingType & self) {
 
-                    size_t shape[] = {self.numberOfNewEdges(), 2};
+                    std::size_t shape[] = {self.numberOfNewEdges(), 2};
                     marray::PyView<EdgeType> newUvIds(shape, shape + 2);
 
                     {
@@ -52,7 +52,7 @@ namespace tools{
                         const auto & newUvIdsInternal = self.getNewUvIds();
 
                         // this could also be parallelized
-                        for(size_t i = 0; i < self.numberOfNewEdges(); ++i) {
+                        for(std::size_t i = 0; i < self.numberOfNewEdges(); ++i) {
                             newUvIds(i, 0) = newUvIdsInternal[i].first;
                             newUvIds(i, 1) = newUvIdsInternal[i].second;
                         }

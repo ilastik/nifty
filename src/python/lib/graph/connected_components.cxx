@@ -131,7 +131,7 @@ namespace graph{
             ComponentsType & self
         ){
             const auto & g = self.graph();
-            const size_t size = g.nodeIdUpperBound()+1;
+            const std::size_t size = g.nodeIdUpperBound()+1;
             nifty::marray::PyView<uint64_t> ccLabels({size});
             for(const auto node : g.nodes()){
                 ccLabels[node] = self.componentLabel(node);

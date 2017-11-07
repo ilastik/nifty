@@ -8,7 +8,7 @@
 void stridesTest()
 {
     {
-        std::vector<size_t> shape({10,20});
+        std::vector<std::size_t> shape({10,20});
         nifty::marray::Marray<int> a(shape.begin(), shape.end(),0, nifty::marray::FirstMajorOrder);
         NIFTY_TEST_OP(a.strides(0),==,20);
         NIFTY_TEST_OP(a.strides(1),==,1);
@@ -26,7 +26,7 @@ void stridesTest()
         
     }
     {
-        std::vector<size_t> shape({10,20});
+        std::vector<std::size_t> shape({10,20});
         nifty::marray::Marray<int> a(shape.begin(), shape.end(),0, nifty::marray::LastMajorOrder);
         
         NIFTY_TEST(a.coordinateOrder() == nifty::marray::LastMajorOrder);

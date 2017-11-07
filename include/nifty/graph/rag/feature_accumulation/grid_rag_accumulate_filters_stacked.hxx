@@ -106,8 +106,8 @@ inline void accumulateInnerSliceFeatures(ACC_CHAIN_VECTOR & channelAccChainVec,
     typedef typename vigra::MultiArrayShape<3>::type VigraCoord;
     typedef LABEL_TYPE LabelType;
 
-    size_t pass = 1;
-    size_t numberOfChannels = channelAccChainVec[0].size();
+    std::size_t pass = 1;
+    std::size_t numberOfChannels = channelAccChainVec[0].size();
 
     // set minmax for accumulator chains
     for(int64_t edge = 0; edge < channelAccChainVec.size(); ++edge){
@@ -166,8 +166,8 @@ inline void accumulateBetweenSliceFeatures(ACC_CHAIN_VECTOR & channelAccChainVec
     typedef typename vigra::MultiArrayShape<3>::type VigraCoord;
     typedef LABEL_TYPE LabelType;
 
-    size_t pass = 1;
-    size_t numberOfChannels = channelAccChainVec[0].size();
+    std::size_t pass = 1;
+    std::size_t numberOfChannels = channelAccChainVec[0].size();
 
     // set minmax for accumulator chains
     for(int64_t edge = 0; edge < channelAccChainVec.size(); ++edge){
@@ -241,7 +241,7 @@ void accumulateEdgeFeaturesFromFiltersWithAccChain(
     typedef std::vector<AccChainVectorType> ChannelAccChainVectorType;
     typedef typename features::ApplyFilters<2>::FiltersToSigmasType FiltersToSigmasType;
 
-    const size_t actualNumberOfThreads = pOpts.getActualNumThreads();
+    const std::size_t actualNumberOfThreads = pOpts.getActualNumThreads();
 
     const auto & shape = rag.shape();
     const auto & labelsProxy = rag.labelsProxy();
@@ -254,7 +254,7 @@ void accumulateEdgeFeaturesFromFiltersWithAccChain(
                                           { true, true, true } });  // HessianOfGaussianEigenvalues
 
     features::ApplyFilters<2> applyFilters(sigmas, filtersToSigmas);
-    size_t numberOfChannels = applyFilters.numberOfChannels();
+    std::size_t numberOfChannels = applyFilters.numberOfChannels();
 
     uint64_t numberOfSlices = shape[0];
 
@@ -559,8 +559,8 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
     const GridRagStacked2D<LABELS_PROXY> & rag,
     const DATA & data,
     const std::vector<std::pair<uint64_t,uint64_t>> & skipEdges,
-    const std::vector<size_t> & skipRanges,
-    const std::vector<size_t> & skipStarts,
+    const std::vector<std::size_t> & skipRanges,
+    const std::vector<std::size_t> & skipStarts,
     const parallel::ParallelOptions & pOpts,
     parallel::ThreadPool & threadpool,
     F && f,
@@ -585,7 +585,7 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
 
     typedef typename features::ApplyFilters<2>::FiltersToSigmasType FiltersToSigmasType;
 
-    const size_t actualNumberOfThreads = pOpts.getActualNumThreads();
+    const std::size_t actualNumberOfThreads = pOpts.getActualNumThreads();
 
     const auto & shape = rag.shape();
     const auto & labelsProxy = rag.labelsProxy();
@@ -598,7 +598,7 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
                                           { true, true, true } });  // HessianOfGaussianEigenvalues
 
     features::ApplyFilters<2> applyFilters(sigmas, filtersToSigmas);
-    size_t numberOfChannels = applyFilters.numberOfChannels();
+    std::size_t numberOfChannels = applyFilters.numberOfChannels();
 
     Coord2 sliceShape2({shape[1], shape[2]});
     Coord sliceShape3({1LL,shape[1], shape[2]});
@@ -619,26 +619,26 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
         FilterBlockStorage dataCopyStorage(threadpool, sliceShape2, 1);
 
         // get unique lower slices with skip edges
-        std::vector<size_t> lowerSlices;
+        std::vector<std::size_t> lowerSlices;
         tools::uniques(skipStarts, lowerSlices);
         auto lowest = int64_t(lowerSlices[0]);
 
         // get upper slices with skip edges for each lower slice and number of skip edges for each lower slice
-        std::map<size_t,std::vector<size_t>> skipSlices;
-        std::map<size_t,size_t> numberOfSkipEdgesPerSlice;
+        std::map<std::size_t,std::vector<std::size_t>> skipSlices;
+        std::map<std::size_t,size_t> numberOfSkipEdgesPerSlice;
 
         // initialize the maps
         std::cout << "Lower slices with skip edges:" << std::endl;
         for(auto sliceId : lowerSlices) {
             std::cout << sliceId << std::endl;
-            skipSlices[sliceId] = std::vector<size_t>();
+            skipSlices[sliceId] = std::vector<std::size_t>();
             numberOfSkipEdgesPerSlice[sliceId] = 0;
         }
 
         // determine the number of skip edges starting from each slice
         // and fill the conversion of uv-ids to edge-id
-        std::map<SkipEdgeStorage, size_t> skipUvsToIds;
-        for(size_t skipId = 0; skipId < skipEdges.size(); ++skipId) {
+        std::map<SkipEdgeStorage, std::size_t> skipUvsToIds;
+        for(std::size_t skipId = 0; skipId < skipEdges.size(); ++skipId) {
 
             // find the source slice of this skip edge and increment the number of edges in the slice
             auto sliceId = skipStarts[skipId];
@@ -656,7 +656,7 @@ void accumulateSkipEdgeFeaturesFromFiltersWithAccChain(
 
         std::vector<vigra::HistogramOptions> histoOptionsVec(numberOfChannels);
 
-        size_t skipEdgeOffset = 0;
+        std::size_t skipEdgeOffset = 0;
         int countSlice = 0;
         for(auto sliceId : lowerSlices) {
 
@@ -829,8 +829,8 @@ void accumulateSkipEdgeFeaturesFromFilters(
     const DATA & data,
     OUTPUT & edgeFeaturesOut,
     const std::vector<std::pair<uint64_t,uint64_t>> & skipEdges,
-    const std::vector<size_t> & skipRanges,
-    const std::vector<size_t> & skipStarts,
+    const std::vector<std::size_t> & skipRanges,
+    const std::vector<std::size_t> & skipStarts,
     const int zDirection = 0,
     const int numberOfThreads = -1
 ){

@@ -38,7 +38,7 @@ void accumulateAffninitiesWithAccChain(
 
     // only single threaded for now
     // accumulator chain vectors for local and lifted edges
-    size_t nEdges = rag.edgeIdUpperBound() + 1;
+    std::size_t nEdges = rag.edgeIdUpperBound() + 1;
     AccChainVectorType edgeAccumulators(nEdges);
 
     // set the histogram options
@@ -54,8 +54,8 @@ void accumulateAffninitiesWithAccChain(
 
     // axes and reanges from the lifted nhood
     // TODO don't hardcode this
-    std::array<int, 3> axes({0, 1, 2});
-    std::array<int, 3> ranges({-1, -1, -1});
+    std::array<int, 3> axes{0, 1, 2};
+    std::array<int, 3> ranges{-1, -1, -1};
 
     Coord4 affCoord;
     Coord3 cU, cV;
@@ -63,10 +63,10 @@ void accumulateAffninitiesWithAccChain(
     int axis, range;
     int pass = 1;
 
-    size_t nLinks = affinities.size();
+    std::size_t nLinks = affinities.size();
     // iterate over all affinity links and accumulate the associated
     // affinity edges
-    for(size_t linkId = 0; linkId < nLinks; ++linkId) {
+    for(std::size_t linkId = 0; linkId < nLinks; ++linkId) {
 
         affinities.indexToCoordinates(linkId, affCoord.begin());
         axis  = axes[affCoord[0]];
@@ -130,7 +130,7 @@ void accumulateAffinities(
     // threadpool
     nifty::parallel::ParallelOptions pOpts(numberOfThreads);
     nifty::parallel::ThreadPool threadpool(pOpts);
-    const size_t actualNumberOfThreads = pOpts.getActualNumThreads();
+    const std::size_t actualNumberOfThreads = pOpts.getActualNumThreads();
 
     auto accumulate = [&](
         const std::vector<AccChainType> & edgeAccChainVec
@@ -196,8 +196,8 @@ void accumulateLongRangeAffninitiesWithAccChain(
 
     // only single threaded for now
     // accumulator chain vectors for local and lifted edges
-    size_t nLocal = rag.edgeIdUpperBound() + 1;
-    size_t nLifted = lnh.edgeIdUpperBound() + 1;
+    std::size_t nLocal = rag.edgeIdUpperBound() + 1;
+    std::size_t nLifted = lnh.edgeIdUpperBound() + 1;
     AccChainVectorType localEdgeAccumulators(nLocal);
     AccChainVectorType liftedEdgeAccumulators(nLifted);
 
@@ -227,10 +227,10 @@ void accumulateLongRangeAffninitiesWithAccChain(
     int axis, range;
     int pass = 1;
 
-    size_t nLinks = affinities.size();
+    std::size_t nLinks = affinities.size();
     // iterate over all affinity links and accumulate the associated
     // affinity edges
-    for(size_t linkId = 0; linkId < nLinks; ++linkId) {
+    for(std::size_t linkId = 0; linkId < nLinks; ++linkId) {
 
         affinities.indexToCoordinates(linkId, affCoord.begin());
         axis  = axes[affCoord[0]];
@@ -303,7 +303,7 @@ void accumulateLongRangeAffinities(
     // threadpool
     nifty::parallel::ParallelOptions pOpts(numberOfThreads);
     nifty::parallel::ThreadPool threadpool(pOpts);
-    const size_t actualNumberOfThreads = pOpts.getActualNumThreads();
+    const std::size_t actualNumberOfThreads = pOpts.getActualNumThreads();
 
     auto accumulateLocal = [&](
         const std::vector<AccChainType> & edgeAccChainVec

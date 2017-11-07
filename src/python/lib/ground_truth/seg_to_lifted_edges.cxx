@@ -24,13 +24,13 @@ namespace ground_truth{
         ){
             NIFTY_CHECK_OP(edges.shape(1), == , 2, "edges must be |N| x 2")
             marray::PyView<uint8_t> out({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1)),
-                size_t(edges.shape(0))
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1)),
+                std::size_t(edges.shape(0))
             }); 
             
             std::vector<std::array<int32_t, 2> > e(edges.shape(0));
-            for(size_t i=0; i<e.size(); ++i){
+            for(std::size_t i=0; i<e.size(); ++i){
                 e[i][0] = edges(i, 0);
                 e[i][1] = edges(i, 1);
             }
@@ -55,13 +55,13 @@ namespace ground_truth{
             NIFTY_CHECK_OP(edges.shape(1), == , 3, "edges must be |N| x 3");
 
             marray::PyView<uint8_t> out({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1)),
-                size_t(edges.shape(0))
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1)),
+                std::size_t(edges.shape(0))
             }); 
             
             std::vector<std::array<int32_t, 3> > e(edges.shape(0));
-            for(size_t i=0; i<e.size(); ++i){
+            for(std::size_t i=0; i<e.size(); ++i){
                 e[i][0] = edges(i, 0);
                 e[i][1] = edges(i, 1);
                 e[i][2] = edges(i, 2);
@@ -88,13 +88,13 @@ namespace ground_truth{
             NIFTY_CHECK_OP(edges.shape(1), == , 4, "edges must be |N| x 4");
 
             marray::PyView<uint8_t> out({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1)),
-                size_t(edges.shape(0))
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1)),
+                std::size_t(edges.shape(0))
             }); 
 
             std::vector<std::array<int32_t, 4> > e(edges.shape(0));
-            for(size_t i=0; i<e.size(); ++i){
+            for(std::size_t i=0; i<e.size(); ++i){
                 e[i][0] = edges(i, 0);
                 e[i][1] = edges(i, 1);
                 e[i][2] = edges(i, 2);
@@ -120,20 +120,20 @@ namespace ground_truth{
             NIFTY_CHECK_OP(edges.shape(1), == , 4, "edges must be |N| x 4");
 
             marray::PyView<uint8_t> out({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1)),
-                size_t(edges.shape(0))
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1)),
+                std::size_t(edges.shape(0))
             }); 
 
             marray::PyView<float> w({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1)),
-                size_t(edges.shape(0))
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1)),
+                std::size_t(edges.shape(0))
             }); 
             
             std::vector<std::array<int32_t, 4> > e(edges.shape(0));
             std::vector<float>                   p(edges.shape(0));
-            for(size_t i=0; i<e.size(); ++i){
+            for(std::size_t i=0; i<e.size(); ++i){
                 p[i] = edge_priors()
                 e[i][0] = edges(i, 0);
                 e[i][1] = edges(i, 1);
@@ -167,8 +167,8 @@ namespace ground_truth{
             
 
             marray::PyView<float> out({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1))
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1))
             }); 
 
 
@@ -194,20 +194,20 @@ namespace ground_truth{
             NIFTY_CHECK_OP(edges.shape(1), == , 4, "edges must be |N| x 4");
 
             marray::PyView<uint8_t> out({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1)),
-                size_t(edges.shape(0))
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1)),
+                std::size_t(edges.shape(0))
             }); 
 
             marray::PyView<float> w({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1)),
-                size_t(edges.shape(0))
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1)),
+                std::size_t(edges.shape(0))
             }); 
             
             std::vector<std::array<int32_t, 4> > e(edges.shape(0));
             std::vector<float>                   p(edges.shape(0));
-            for(size_t i=0; i<e.size(); ++i){
+            for(std::size_t i=0; i<e.size(); ++i){
                 p[i] = edge_priors()
                 e[i][0] = edges(i, 0);
                 e[i][1] = edges(i, 1);

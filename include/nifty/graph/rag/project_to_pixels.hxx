@@ -16,7 +16,7 @@ namespace graph{
 
 
 template<
-    size_t DIM, 
+    std::size_t DIM, 
     class LABELS_TYPE, 
     class PIXEL_ARRAY, 
     class NODE_MAP

@@ -52,7 +52,7 @@ namespace graph{
             marray::PyView<uint32_t> lnhOut({nLifted, uint64_t(2)});
             {
                 py::gil_scoped_release allowThreads;
-                for(size_t e = 0; e < nLifted; ++e) {
+                for(std::size_t e = 0; e < nLifted; ++e) {
                     lnhOut(e, 0) = lnh.u(e);
                     lnhOut(e, 1) = lnh.v(e);
                 }

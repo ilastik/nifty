@@ -22,8 +22,8 @@ namespace cgp{
 
 
     template<
-        size_t DIM, 
-        size_t CELL_TYPE,
+        std::size_t DIM, 
+        std::size_t CELL_TYPE,
         class CLS
     >
     void exportCellBoundsT(py::module & m, py::class_<CLS> & pyCls) {
@@ -60,12 +60,12 @@ namespace cgp{
             auto clsVec = py::class_<Cells0BoundsVector2D>(m, clsNameVec.c_str());
             clsVec
                 .def("__array__",[](const Cells0BoundsVector2D & self){
-                    nifty::marray::PyView<uint32_t> ret({size_t(self.size()),size_t(4)});
-                    for(size_t ci=0 ;ci<self.size(); ++ci){
-                        for(size_t i=0; i<self[ci].size(); ++i){
+                    nifty::marray::PyView<uint32_t> ret({std::size_t(self.size()),std::size_t(4)});
+                    for(std::size_t ci=0 ;ci<self.size(); ++ci){
+                        for(std::size_t i=0; i<self[ci].size(); ++i){
                             ret(ci,i) = self[ci][i];
                         }
-                        for(size_t i=self[ci].size(); i<4; ++i){
+                        for(std::size_t i=self[ci].size(); i<4; ++i){
                             ret(ci,i) = 0;
                         }
                     }
@@ -88,7 +88,7 @@ namespace cgp{
             auto clsVec = py::class_<Cell1BoundsVector2D>(m, clsNameVec.c_str());
             clsVec
                 .def("__array__",[](const Cell1BoundsVector2D & self){
-                    nifty::marray::PyView<uint32_t> ret({size_t(self.size()),size_t(2)});
+                    nifty::marray::PyView<uint32_t> ret({std::size_t(self.size()),std::size_t(2)});
                     for(uint32_t ci=0 ;ci<self.size(); ++ci){
                         ret(ci,0) = self[ci][0];
                         ret(ci,1) = self[ci][1];
@@ -117,7 +117,7 @@ namespace cgp{
             clsVec
                 .def(py::init<const CellBoundsVector<2,0 > &>())
                 .def("__array__",[](const Cell1BoundedByVector2D & self){
-                    nifty::marray::PyView<uint32_t> ret({size_t(self.size()),size_t(2)});
+                    nifty::marray::PyView<uint32_t> ret({std::size_t(self.size()),std::size_t(2)});
                     for(uint32_t ci=0 ;ci<self.size(); ++ci){
                         const auto & b = self[ci];
                         ret(ci,0) = b[0];
@@ -125,7 +125,7 @@ namespace cgp{
                     }
                     return ret;
                 })
-                .def("cellsWithCertainBoundedBySize",[](const Cell1BoundedByVector2D & self,const size_t size){
+                .def("cellsWithCertainBoundedBySize",[](const Cell1BoundedByVector2D & self,const std::size_t size){
 
                     std::vector<uint32_t>  cell1Labels;
 
@@ -137,7 +137,7 @@ namespace cgp{
                     }
 
 
-                    nifty::marray::PyView<uint32_t> ret({size_t(cell1Labels.size())});
+                    nifty::marray::PyView<uint32_t> ret({std::size_t(cell1Labels.size())});
                     for(auto i=0; i<ret.size(); ++i){
                         ret[i] = cell1Labels[i];
                     }
@@ -163,7 +163,7 @@ namespace cgp{
             clsVec
                 .def(py::init<const CellBoundsVector<2,1 > &>())
                 //.def("__array__",[](const Cell2BoundedByVector2D & self){
-                //    nifty::marray::PyView<uint32_t> ret({size_t(self.size()),size_t(2)});
+                //    nifty::marray::PyView<uint32_t> ret({std::size_t(self.size()),std::size_t(2)});
                 //    for(uint32_t ci=0 ;ci<self.size(); ++ci){
                 //        ret(ci,0) = self[ci][0];
                 //        ret(ci,1) = self[ci][1];

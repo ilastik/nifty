@@ -31,8 +31,8 @@ namespace lifted_multicut{
                 marray::PyView<double,1> nodeSizes,
                 std::vector<double > sizeRegularizers
             ){
-                const size_t numberOfFeatures = sizeRegularizers.size() * 2;
-                const size_t numberOfLiftedEdges = objective.numberOfLiftedEdges();
+                const std::size_t numberOfFeatures = sizeRegularizers.size() * 2;
+                const std::size_t numberOfLiftedEdges = objective.numberOfLiftedEdges();
                 marray::PyView<double> out({numberOfFeatures, numberOfLiftedEdges});
 
                 {

@@ -30,14 +30,14 @@ namespace graph{
 
 
 template<class COORD>
-COORD makeCoord2(const COORD & coord,const size_t axis){
+COORD makeCoord2(const COORD & coord,const std::size_t axis){
     COORD coord2 = coord;
     coord2[axis] += 1;
     return coord2;
 };
 
 
-template<size_t DIM, class LABEL_TYPE>
+template<std::size_t DIM, class LABEL_TYPE>
 class ExplicitLabels;
 
 template<class LABELS_PROXY>
@@ -45,14 +45,14 @@ struct RefHelper{
     typedef const LABELS_PROXY & type;
 };
 
-template<size_t DIM, class LABEL_TYPE>
+template<std::size_t DIM, class LABEL_TYPE>
 struct RefHelper<ExplicitLabels<DIM, LABEL_TYPE>>{
     typedef ExplicitLabels<DIM, LABEL_TYPE> type;
 };
 
 
 
-template<size_t DIM, class LABELS_PROXY>
+template<std::size_t DIM, class LABELS_PROXY>
 class GridRag : public UndirectedGraph<>{
 public:
     struct DontComputeRag{};

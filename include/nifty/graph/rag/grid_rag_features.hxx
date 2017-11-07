@@ -10,7 +10,7 @@ namespace nifty{
 namespace graph{
 
 
-    template<size_t DIM, class LABELS_TYPE, class LABELS, class NODE_MAP>
+    template<std::size_t DIM, class LABELS_TYPE, class LABELS, class NODE_MAP>
     void gridRagAccumulateLabels(
         const ExplicitLabelsGridRag<DIM, LABELS_TYPE> & graph,
         nifty::marray::View<LABELS> data,
@@ -24,7 +24,7 @@ namespace graph{
         const auto & shape = labelsProxy.shape();
         const auto labels = labelsProxy.labels();
 
-        std::vector<  std::unordered_map<LABELS, size_t> > overlaps(graph.numberOfNodes());
+        std::vector<  std::unordered_map<LABELS, std::size_t> > overlaps(graph.numberOfNodes());
 
 
 
@@ -37,7 +37,7 @@ namespace graph{
         for(const auto node : graph.nodes()){
             const auto & ol = overlaps[node];
             // find max ol
-            size_t maxOl = 0;
+            std::size_t maxOl = 0;
             LABELS maxOlLabel = 0;
             for(auto kv : ol){
                 if(kv.second > maxOl){

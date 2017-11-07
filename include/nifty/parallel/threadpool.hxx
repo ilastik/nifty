@@ -87,7 +87,7 @@ class ParallelOptions
 
   private:
         // helper function to compute the actual number of threads
-    static size_t actualNumThreads(const int userNThreads)
+    static std::size_t actualNumThreads(const int userNThreads)
     {
         #ifdef NIFTY_NO_PARALLELISM
             return 0;
@@ -182,7 +182,7 @@ class ThreadPool
     /**
      * Return the number of worker threads.
      */
-    size_t nThreads() const
+    std::size_t nThreads() const
     {
         return workers.size();
     }
@@ -208,8 +208,8 @@ private:
 
 inline void ThreadPool::init(const ParallelOptions & options)
 {
-    const size_t actualNThreads = options.getNumThreads();
-    for(size_t ti = 0; ti<actualNThreads; ++ti)
+    const std::size_t actualNThreads = options.getNumThreads();
+    for(std::size_t ti = 0; ti<actualNThreads; ++ti)
     {
         workers.emplace_back(
             [ti,this]
@@ -349,14 +349,14 @@ inline void parallel_foreach_impl(
     std::vector<std::future<void> > futures;
     for( ;iter<end; iter+=chunkedWorkPerThread)
     {
-        const size_t lc = std::min(workload, chunkedWorkPerThread);
+        const std::size_t lc = std::min(workload, chunkedWorkPerThread);
         workload-=lc;
         futures.emplace_back(
             pool.enqueue(
                 [&f, iter, lc]
                 (int id)
                 {
-                    for(size_t i=0; i<lc; ++i)
+                    for(std::size_t i=0; i<lc; ++i)
                         f(id, iter[i]);
                 }
             )
@@ -390,7 +390,7 @@ inline void parallel_foreach_impl(
     std::vector<std::future<void> > futures;
     for(;;)
     {
-        const size_t lc = std::min(chunkedWorkPerThread, workload);
+        const std::size_t lc = std::min(chunkedWorkPerThread, workload);
         workload -= lc;
         futures.emplace_back(
             pool.enqueue(
@@ -398,14 +398,14 @@ inline void parallel_foreach_impl(
                 (int id)
                 {
                     auto iterCopy = iter;
-                    for(size_t i=0; i<lc; ++i){
+                    for(std::size_t i=0; i<lc; ++i){
                         f(id, *iterCopy);
                         ++iterCopy;
                     }
                 }
             )
         );
-        for (size_t i = 0; i < lc; ++i)
+        for (std::size_t i = 0; i < lc; ++i)
         {
             ++iter;
             if (iter == end)
@@ -433,7 +433,7 @@ inline void parallel_foreach_impl(
     F && f,
     std::input_iterator_tag
 ){
-    size_t num_items = 0;
+    std::size_t num_items = 0;
     std::vector<std::future<void> > futures;
     for (; iter != end; ++iter)
     {
@@ -461,7 +461,7 @@ inline void parallel_foreach_single_thread(
     F && f,
     const std::ptrdiff_t nItems = 0
 ){
-    size_t n = 0;
+    std::size_t n = 0;
     for (; begin != end; ++begin)
     {
         f(0, *begin);
@@ -541,8 +541,8 @@ inline void parallel_foreach_single_thread(
 
     int main()
     {
-        size_t const n_threads = 4;
-        size_t const n = 2000;
+        std::size_t const n_threads = 4;
+        std::size_t const n = 2000;
         vector<int> input(n);
 
         auto iter = input.begin(),
@@ -558,7 +558,7 @@ inline void parallel_foreach_single_thread(
         parallel_foreach(n_threads, iter, end,
             // the functor to be executed, defined as a lambda function
             // (first argument: thread ID, second argument: result of *iter)
-            [&results](size_t thread_id, int items)
+            [&results](std::size_t thread_id, int items)
             {
                 results[thread_id] += items;
             }

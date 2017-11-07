@@ -44,8 +44,8 @@ namespace cgp{
                     const CellGeometryVector<2,1> &  cell1GeometryVector,
                     const CellBoundedByVector<2,1> & cell1BoundedByVector
                 ){
-                    const auto nFeatures = size_t(op.numberOfFeatures());
-                    const auto nCells1   = size_t(cell1GeometryVector.size());
+                    const auto nFeatures = std::size_t(op.numberOfFeatures());
+                    const auto nCells1   = std::size_t(cell1GeometryVector.size());
 
                     nifty::marray::PyView<float> out({nCells1, nFeatures});
 
@@ -66,16 +66,16 @@ namespace cgp{
 
             pyCls
             .def(
-                py::init< const std::vector<size_t> &>(),
-                py::arg("dists")  =  std::vector<size_t>({size_t(3),size_t(5),size_t(7)})
+                py::init< const std::vector<std::size_t> &>(),
+                py::arg("dists")  =  std::vector<std::size_t>({std::size_t(3),std::size_t(5),std::size_t(7)})
             )
             .def("__call__",
                 [](
                     const Op & op,
                     const CellGeometryVector<2,1> &  cell1GeometryVector
                 ){
-                    const auto nFeatures = size_t(op.numberOfFeatures());
-                    const auto nCells1   = size_t(cell1GeometryVector.size());
+                    const auto nFeatures = std::size_t(op.numberOfFeatures());
+                    const auto nCells1   = std::size_t(cell1GeometryVector.size());
 
                     nifty::marray::PyView<float> out({nCells1, nFeatures});
 
@@ -102,8 +102,8 @@ namespace cgp{
                     const CellGeometryVector<2,2>   & cell2GeometryVector,
                     const CellBoundsVector<2,1>     & cell1BoundsVector
                 ){
-                    const auto nFeatures = size_t(op.numberOfFeatures());
-                    const auto nCells1   = size_t(cell1GeometryVector.size());
+                    const auto nFeatures = std::size_t(op.numberOfFeatures());
+                    const auto nCells1   = std::size_t(cell1GeometryVector.size());
 
                     nifty::marray::PyView<float> out({nCells1, nFeatures});
 
@@ -137,8 +137,8 @@ namespace cgp{
                     const CellBoundedByVector<2,1>  & cell1BoundedByVector,
                     const CellBoundedByVector<2,2>  & cell2BoundedByVector
                 ){
-                    const auto nFeatures = size_t(op.numberOfFeatures());
-                    const auto nCells1   = size_t(cell1BoundsVector.size());
+                    const auto nFeatures = std::size_t(op.numberOfFeatures());
+                    const auto nCells1   = std::size_t(cell1BoundsVector.size());
 
                     nifty::marray::PyView<float> out({nCells1, nFeatures});
 

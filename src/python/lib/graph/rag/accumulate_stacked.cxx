@@ -102,12 +102,12 @@ namespace graph{
         [](
             const RAG & rag,
             const std::vector<std::pair<uint64_t,uint64_t>> & skipEdges,
-            const std::vector<size_t> & skipRanges,
-            const std::vector<size_t> & skipStarts,
+            const std::vector<std::size_t> & skipRanges,
+            const std::vector<std::size_t> & skipStarts,
             const int numberOfThreads
         ){
-            size_t nSkipEdges = skipEdges.size();
-            std::vector<size_t> out(nSkipEdges);
+            std::size_t nSkipEdges = skipEdges.size();
+            std::vector<std::size_t> out(nSkipEdges);
             {
                 py::gil_scoped_release allowThreads;
                 getSkipEdgeLengths(rag,

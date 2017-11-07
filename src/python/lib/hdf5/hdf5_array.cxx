@@ -27,8 +27,8 @@ namespace hdf5{
                 Hdf5ArrayType & instance,
                 const hid_t & groupHandle,
                 const std::string & datasetName,
-                std::vector<size_t> shape,
-                std::vector<size_t> chunkShape,
+                std::vector<std::size_t> shape,
+                std::vector<std::size_t> chunkShape,
                 const int compression
             ){
                 NIFTY_CHECK_OP(shape.size(), == ,chunkShape.size(), 
@@ -54,20 +54,20 @@ namespace hdf5{
             })
             .def("setOffsetFront",[](
                 Hdf5ArrayType & array,
-                std::vector<size_t> offsetFront
+                std::vector<std::size_t> offsetFront
             ){
                 return array.setOffsetFront(offsetFront.begin());
             })
             .def("setOffsetBack",[](
                 Hdf5ArrayType & array,
-                std::vector<size_t> offsetBack
+                std::vector<std::size_t> offsetBack
             ){
                 return array.setOffsetBack(offsetBack.begin());
             })
             .def("readSubarray",[](
                 const Hdf5ArrayType & array,
-                std::vector<size_t> roiBegin,
-                std::vector<size_t> roiEnd
+                std::vector<std::size_t> roiBegin,
+                std::vector<std::size_t> roiEnd
             ){
                 //std::cout<<"READ\n";
                 
@@ -82,8 +82,8 @@ namespace hdf5{
                 NIFTY_CHECK_OP(roiEnd.size(),==,dim,  "`roiEnd`has wrong size");
 
                 //std::cout<<"make shape\n";
-                std::vector<size_t> shape(dim);
-                for(size_t d=0; d<dim; ++d){
+                std::vector<std::size_t> shape(dim);
+                for(std::size_t d=0; d<dim; ++d){
                     shape[d] = roiEnd[d] - roiBegin[d];
                     //std::cout<<"s "<< shape[d]<<"\n";
                 }
@@ -112,7 +112,7 @@ namespace hdf5{
 
             .def("writeSubarray",[](
                 Hdf5ArrayType & array,
-                std::vector<size_t> roiBegin,
+                std::vector<std::size_t> roiBegin,
                 nifty::marray::PyView<T> in
             ){
                 const auto dim = array.dimension();

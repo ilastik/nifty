@@ -336,7 +336,7 @@ public:
 
             // find the correct affinity edge
             AffinityCoordType affCoord;
-            for(size_t d = 0; d < DIM; ++d) {
+            for(std::size_t d = 0; d < DIM; ++d) {
                 auto diff = cU[d] - cV[d];
                 if(diff == 0) {
                     affCoord[d + 1] = cU[d];
@@ -364,21 +364,21 @@ public:
         for(auto d=1; d<DIM+1; ++d){
             NIFTY_CHECK_OP(shape(d-1), ==, affinities.shape(d), "wrong shape")
         }
-        size_t affLen = affinities.shape(0);
+        std::size_t affLen = affinities.shape(0);
         std::vector<int> ranges(rangesBegin, rangesBegin + affLen);
         std::vector<int> axes(axesBegin, axesBegin + affLen);
 
         AffinityCoordType affCoord;
         CoordinateType cU, cV;
-        size_t axis, range;
+        std::size_t axis, range;
 
         // iterate over the affinties
-        for(size_t edgeId = 0; edgeId < affinities.size(); ++edgeId) {
+        for(std::size_t edgeId = 0; edgeId < affinities.size(); ++edgeId) {
             affinities.indexToCoordinates(edgeId, affCoord.begin());
             axis  = axes[affCoord[0]];
             range = ranges[affCoord[0]];
 
-            for(size_t d = 0; d < DIM; ++d) {
+            for(std::size_t d = 0; d < DIM; ++d) {
                 cU[d] = affCoord[d+1];
                 cV[d] = affCoord[d+1];
             }

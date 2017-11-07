@@ -20,7 +20,7 @@ public:
     typedef std::pair<NodeType, NodeType> UvType;
     typedef std::vector<UvType> UvVectorType;
 
-    EdgeMapping(const size_t numberOfEdges, const int nThreads=-1)
+    EdgeMapping(const std::size_t numberOfEdges, const int nThreads=-1)
         : oldToNewEdges_(numberOfEdges), newUvIds_(), threadpool_(nThreads)
     {}
 
@@ -34,7 +34,7 @@ public:
 
     void getNewEdgeIds(const std::vector<EdgeType> & edgeIds, std::vector<EdgeType> & newEdgeIds) const;
 
-    size_t numberOfNewEdges() const
+    std::size_t numberOfNewEdges() const
     {return newUvIds_.size();}
 
 private:
@@ -111,7 +111,7 @@ void EdgeMapping<EDGE_TYPE, NODE_TYPE>::initializeMapping(const marray::View<Edg
 
     //// via set TODO unordered
     std::set<UvType> uvNewTmp;
-    for(size_t t = 0; t < threadpool_.nThreads(); ++t) {
+    for(std::size_t t = 0; t < threadpool_.nThreads(); ++t) {
         const auto & thisSet = threadSets[t];
         uvNewTmp.insert(thisSet.begin(), thisSet.end());
     }

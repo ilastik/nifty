@@ -19,7 +19,7 @@ namespace higher_order_multicut{
             
 
 
-        size_t arity()const{
+        std::size_t arity()const{
             return edgeIds_.size();
         }
         const std::vector<uint64_t> & edgeIds(){

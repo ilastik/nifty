@@ -199,7 +199,7 @@ namespace ground_truth{
         }
 
 
-        template<size_t DIM, class LABEL_A, class LABEL_B>
+        template<std::size_t DIM, class LABEL_A, class LABEL_B>
         void fill(
             const marray::View<LABEL_A> arrayA,
             const marray::View<LABEL_B> arrayB

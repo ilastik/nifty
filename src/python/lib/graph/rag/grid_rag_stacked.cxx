@@ -51,7 +51,7 @@ namespace graph{
             .def_property_readonly("shape",[](const GridRagType & self){return self.shape();})
             .def("minMaxLabelPerSlice",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t, 2> out({size_t(shape[0]),size_t(2)});
+                nifty::marray::PyView<uint64_t, 2> out({std::size_t(shape[0]),std::size_t(2)});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     auto mima = self.minMaxNode(sliceIndex);
                     out(sliceIndex, 0) = mima.first;
@@ -61,7 +61,7 @@ namespace graph{
             })
             .def("numberOfNodesPerSlice",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.numberOfNodes(sliceIndex);
                 }
@@ -69,7 +69,7 @@ namespace graph{
             })
             .def("numberOfInSliceEdges",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.numberOfInSliceEdges(sliceIndex);
                 }
@@ -77,7 +77,7 @@ namespace graph{
             })
             .def("numberOfInBetweenSliceEdges",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.numberOfInBetweenSliceEdges(sliceIndex);
                 }
@@ -85,7 +85,7 @@ namespace graph{
             })
             .def("inSliceEdgeOffset",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.inSliceEdgeOffset(sliceIndex);
                 }
@@ -93,7 +93,7 @@ namespace graph{
             })
             .def("betweenSliceEdgeOffset",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.betweenSliceEdgeOffset(sliceIndex);
                 }
@@ -187,7 +187,7 @@ namespace graph{
             .def("labelsProxy",&GridRagType::labelsProxy,py::return_value_policy::reference)
             .def("minMaxLabelPerSlice",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t, 2> out({size_t(shape[0]),size_t(2)});
+                nifty::marray::PyView<uint64_t, 2> out({std::size_t(shape[0]),std::size_t(2)});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     auto mima = self.minMaxNode(sliceIndex);
                     out(sliceIndex, 0) = mima.first;
@@ -197,7 +197,7 @@ namespace graph{
             })
             .def("numberOfNodesPerSlice",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.numberOfNodes(sliceIndex);
                 }
@@ -205,7 +205,7 @@ namespace graph{
             })
             .def("numberOfInSliceEdges",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.numberOfInSliceEdges(sliceIndex);
                 }
@@ -213,7 +213,7 @@ namespace graph{
             })
             .def("numberOfInBetweenSliceEdges",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.numberOfInBetweenSliceEdges(sliceIndex);
                 }
@@ -221,7 +221,7 @@ namespace graph{
             })
             .def("inSliceEdgeOffset",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.inSliceEdgeOffset(sliceIndex);
                 }
@@ -229,7 +229,7 @@ namespace graph{
             })
             .def("betweenSliceEdgeOffset",[](const GridRagType & self){
                 const auto & shape = self.shape();
-                nifty::marray::PyView<uint64_t,  1> out({size_t(shape[0])});
+                nifty::marray::PyView<uint64_t,  1> out({std::size_t(shape[0])});
                 for(auto sliceIndex = 0; sliceIndex<shape[0]; ++sliceIndex){
                     out(sliceIndex) =  self.betweenSliceEdgeOffset(sliceIndex);
                 }

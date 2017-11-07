@@ -16,7 +16,7 @@ namespace nifty {
 namespace graph {
 
     // TODO implementations suitable for hdf5 and flat rag
-    template<size_t DIM, class RAG_TYPE>
+    template<std::size_t DIM, class RAG_TYPE>
     class RagCoordinates {
 
     public:
@@ -57,7 +57,7 @@ namespace graph {
             return rag_;
         }
 
-        size_t storageLengths() const {
+        std::size_t storageLengths() const {
             return storage_.size();
         }
 
@@ -105,7 +105,7 @@ namespace graph {
     };
 
 
-    template<size_t DIM, class RAG_TYPE>
+    template<std::size_t DIM, class RAG_TYPE>
     template<class T>
     inline void RagCoordinates<DIM, RAG_TYPE>::writeBothCoordinates(const int64_t edgeId, const T edgeVal, marray::View<T> & out, const std::vector<int64_t> & offset) const {
 
@@ -115,8 +115,8 @@ namespace graph {
             outShape[d] = out.shape(d);
         }
 
-        for(size_t ii = 0; ii < coords.size() / DIM; ++ii) {
-            for(size_t d = 0; d < DIM; ++d) {
+        for(std::size_t ii = 0; ii < coords.size() / DIM; ++ii) {
+            for(std::size_t d = 0; d < DIM; ++d) {
                 coordUp[d] = static_cast<int64_t>( ceil(float(coords[DIM * ii + d]) / 2) );
                 coordDn[d] = static_cast<int64_t>( floor(float(coords[DIM * ii + d]) / 2) );
             }
@@ -136,7 +136,7 @@ namespace graph {
     }
 
 
-    template<size_t DIM, class RAG_TYPE>
+    template<std::size_t DIM, class RAG_TYPE>
     template<class T>
     inline void RagCoordinates<DIM, RAG_TYPE>::writeLowerCoordinates(const int64_t edgeId, const T edgeVal, marray::View<T> & out, const std::vector<int64_t> & offset) const {
 
@@ -146,8 +146,8 @@ namespace graph {
             outShape[d] = out.shape(d);
         }
 
-        for(size_t ii = 0; ii < coords.size() / DIM; ++ii) {
-            for(size_t d = 0; d < DIM; ++d) {
+        for(std::size_t ii = 0; ii < coords.size() / DIM; ++ii) {
+            for(std::size_t d = 0; d < DIM; ++d) {
                 coord[d] = static_cast<int64_t>( floor(float(coords[DIM * ii + d]) / 2) );
             }
             if( !offset.empty() ) {
@@ -160,7 +160,7 @@ namespace graph {
     }
 
 
-    template<size_t DIM, class RAG_TYPE>
+    template<std::size_t DIM, class RAG_TYPE>
     template<class T>
     inline void RagCoordinates<DIM, RAG_TYPE>::writeUpperCoordinates(const int64_t edgeId, const T edgeVal, marray::View<T> & out, const std::vector<int64_t> & offset) const {
 
@@ -170,8 +170,8 @@ namespace graph {
             outShape[d] = out.shape(d);
         }
 
-        for(size_t ii = 0; ii < coords.size() / DIM; ++ii) {
-            for(size_t d = 0; d < DIM; ++d) {
+        for(std::size_t ii = 0; ii < coords.size() / DIM; ++ii) {
+            for(std::size_t d = 0; d < DIM; ++d) {
                 coord[d] = static_cast<int64_t>( ceil(float(coords[DIM * ii + d]) / 2) );
             }
             if( !offset.empty() ) {
@@ -184,7 +184,7 @@ namespace graph {
     }
 
 
-    template<size_t DIM, class RAG_TYPE>
+    template<std::size_t DIM, class RAG_TYPE>
     void RagCoordinates<DIM, RAG_TYPE>::initStorage(const int nThreads) {
 
         typedef std::vector<std::vector<int32_t>> CoordinateVectorType;
@@ -204,10 +204,10 @@ namespace graph {
 
         nifty::parallel::ThreadPool threadpool(nThreads);
         std::vector<CoordinateVectorType> perThreadDataVec(threadpool.nThreads());
-        for(size_t i=0; i<perThreadDataVec.size(); ++i)
+        for(std::size_t i=0; i<perThreadDataVec.size(); ++i)
             perThreadDataVec[i].resize(numEdges);
 
-        auto makeCoord2 = [](const Coord & coord,const size_t axis){
+        auto makeCoord2 = [](const Coord & coord,const std::size_t axis){
             Coord coord2 = coord;
             coord2[axis] += 1;
             return coord2;
@@ -218,7 +218,7 @@ namespace graph {
 
             auto & edgeCoords = perThreadDataVec[tid];
             const auto lU = labels(coord.asStdArray());
-            for(size_t axis=0; axis<DIM; ++axis){
+            for(std::size_t axis=0; axis<DIM; ++axis){
                 const auto coord2 = makeCoord2(coord, axis);
                 if(coord2[axis] < shape[axis]){
                     const auto lV = labels(coord2.asStdArray());
@@ -246,7 +246,7 @@ namespace graph {
     }
 
 
-    template<size_t DIM, class RAG_TYPE>
+    template<std::size_t DIM, class RAG_TYPE>
     template<class T>
     void RagCoordinates<DIM, RAG_TYPE>::edgesToVolume(
             const std::vector<T> & edgeValues,
@@ -284,7 +284,7 @@ namespace graph {
     }
 
 
-    template<size_t DIM, class RAG_TYPE>
+    template<std::size_t DIM, class RAG_TYPE>
     template<class T>
     void RagCoordinates<DIM, RAG_TYPE>::edgesToSubVolume(
             const std::vector<T> & edgeValues,

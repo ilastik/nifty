@@ -14,7 +14,7 @@ namespace histogram{
         Histogram(
             const T minVal, 
             const T maxVal,
-            const size_t bincount
+            const std::size_t bincount
         )
         :   counts_(bincount),
             minVal_(minVal),
@@ -50,10 +50,10 @@ namespace histogram{
         }
 
 
-        const BincountType & operator[](const size_t i)const{
+        const BincountType & operator[](const std::size_t i)const{
             return counts_[i];
         }
-        size_t numberOfBins()const{
+        std::size_t numberOfBins()const{
             return counts_.size();
         }
         BincountType sum()const{
@@ -70,15 +70,15 @@ namespace histogram{
 
             // low and high are the same
             if(low + 0.5 >= high){
-                counts_[size_t(low)] += w;
+                counts_[std::size_t(low)] += w;
             }
             // low and high are different
             else{
                 const auto wLow  = high - b;
                 const auto wHigh = double(b) - low;
 
-                counts_[size_t(low)]  += w*wLow;
-                counts_[size_t(high)] += w*wHigh;
+                counts_[std::size_t(low)]  += w*wLow;
+                counts_[std::size_t(high)] += w*wHigh;
             }
             sum_ += w;
         }

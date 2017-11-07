@@ -436,7 +436,7 @@ void save(
 {
     std::size_t shape[] = {in.size()};
     andres::Marray<T> mvector(shape, shape + 1);
-    for(size_t j=0; j<in.size(); ++j) {
+    for(std::size_t j=0; j<in.size(); ++j) {
         mvector(j) = in[j];
     }
     save(groupHandle, datasetName, mvector);

@@ -22,10 +22,10 @@ namespace detail_fastfilters {
     template <> struct FastfiltersDim<fastfilters_array2d_t> {
         static const unsigned int ndim = 2;
     
-        static void set_z(size_t /*n_z*/, fastfilters_array2d_t /*&k*/)
+        static void set_z(std::size_t /*n_z*/, fastfilters_array2d_t /*&k*/)
         {
         }
-        static void set_stride_z(size_t /*n_z*/, fastfilters_array2d_t /*&k*/)
+        static void set_stride_z(std::size_t /*n_z*/, fastfilters_array2d_t /*&k*/)
         {
         }
     };
@@ -33,11 +33,11 @@ namespace detail_fastfilters {
     template <> struct FastfiltersDim<fastfilters_array3d_t> {
         static const unsigned int ndim = 3;
     
-        static void set_z(size_t n_z, fastfilters_array3d_t &k)
+        static void set_z(std::size_t n_z, fastfilters_array3d_t &k)
         {
             k.n_z = n_z;
         }
-        static void set_stride_z(size_t stride_z, fastfilters_array3d_t &k)
+        static void set_stride_z(std::size_t stride_z, fastfilters_array3d_t &k)
         {
             k.stride_z = stride_z;
         }
@@ -188,7 +188,7 @@ namespace detail_fastfilters {
             if( !fastfilters_fir_hog2d(&ff, sigma, xx, xy, yy, &opt_) ) 
                 throw std::runtime_error("HessianOfGaussian 2d failed.");
 
-            const size_t numberOfPixels = ff.n_x * ff.n_y;
+            const std::size_t numberOfPixels = ff.n_x * ff.n_y;
 
             float* ev0 = &out(0);
             float* ev1 = &out(0) + numberOfPixels;
@@ -212,7 +212,7 @@ namespace detail_fastfilters {
             if( !fastfilters_fir_hog3d(&ff, sigma, xx, yy, zz, xy, xz, yz, &opt_) ) 
                 throw std::runtime_error("HessianOfGaussian 3d failed.");
 
-            const size_t numberOfPixels = ff.n_x * ff.n_y * ff.n_z;
+            const std::size_t numberOfPixels = ff.n_x * ff.n_y * ff.n_z;
 
             float* ev0 = &out(0);
             float* ev1 = &out(0) + numberOfPixels;
@@ -253,7 +253,7 @@ namespace detail_fastfilters {
             if( !fastfilters_fir_structure_tensor2d(&ff, sigma, sigmaOuter_, xx, xy, yy, &opt_) ) 
                 throw std::runtime_error("StructurTensor 2d failed.");
 
-            const size_t numberOfPixels = ff.n_x * ff.n_y;
+            const std::size_t numberOfPixels = ff.n_x * ff.n_y;
 
             float* ev0 = &out(0);
             float* ev1 = &out(0) + numberOfPixels;
@@ -280,7 +280,7 @@ namespace detail_fastfilters {
             if( !fastfilters_fir_structure_tensor3d(&ff, sigma, 2*sigma, xx, yy, zz, xy, xz, yz, &opt_) ) 
                 throw std::runtime_error("StructureTensor 3d failed.");
 
-            const size_t numberOfPixels = ff.n_x * ff.n_y * ff.n_z;
+            const std::size_t numberOfPixels = ff.n_x * ff.n_y * ff.n_z;
 
             float* ev0 = &out(0);
             float* ev1 = &out(0) + numberOfPixels;
@@ -331,7 +331,7 @@ namespace detail_fastfilters {
             for(const auto & filtToSig : filtersToSigmas)
                 NIFTY_CHECK_OP(filtToSig.size(),==,sigmas_.size(),"");
             
-            for(size_t ii = 0; ii < filtersToSigmas_.size(); ++ii) {
+            for(std::size_t ii = 0; ii < filtersToSigmas_.size(); ++ii) {
                 // if at least one sigma is active, we push back the corresponding filter
                 const auto & filtToSig = filtersToSigmas_[ii];
                 bool hasSigma = false;
@@ -374,14 +374,14 @@ namespace detail_fastfilters {
             applyFiltersParallel(in, out, shapeSingleChannel, shapeMultiChannel, base, threadpool);
         }
 
-        size_t numberOfChannels() const {
-            size_t numberOfChannels = 0;
-            for( size_t ii = 0; ii < activeFilters_.size(); ++ii ) {
+        std::size_t numberOfChannels() const {
+            std::size_t numberOfChannels = 0;
+            for( std::size_t ii = 0; ii < activeFilters_.size(); ++ii ) {
                 if( !activeFilters_[ii] )
                     continue;
-                size_t nChans = filters_.at(ii)->isMultiChannel() ? DIM : 1;
+                std::size_t nChans = filters_.at(ii)->isMultiChannel() ? DIM : 1;
                 const auto & activeSigmas = filtersToSigmas_[ii];
-                for( size_t jj = 0; jj < sigmas_.size(); ++jj ) {
+                for( std::size_t jj = 0; jj < sigmas_.size(); ++jj ) {
                     if( activeSigmas[jj] )
                         numberOfChannels += nChans;
                 }
@@ -424,12 +424,12 @@ namespace detail_fastfilters {
             detail_fastfilters::convertMarray2ff(in, ff);
 
             // apply filters sequentially
-            for( size_t ii = 0; ii < activeFilters_.size(); ++ii ) {
+            for( std::size_t ii = 0; ii < activeFilters_.size(); ++ii ) {
                 if( !activeFilters_[ii] )
                     continue;
                 const auto & activeSigmas = filtersToSigmas_[ii];
                 auto & filter = filters_.at(ii);
-                for( size_t jj = 0; jj < sigmas_.size(); ++jj ) {
+                for( std::size_t jj = 0; jj < sigmas_.size(); ++jj ) {
                     if( !activeSigmas[jj] )
                         continue;
                     auto sigma = sigmas_[jj];
@@ -458,11 +458,11 @@ namespace detail_fastfilters {
             
             // determine start coordinates to run with presmoothing
             std::vector<std::vector<Coord>> bases(sigmas_.size());
-            for(size_t ii = 0; ii < bases.size(); ++ii)
+            for(std::size_t ii = 0; ii < bases.size(); ++ii)
                 bases[ii] = std::vector<Coord>(filtersToSigmas_.size());
             int64_t channelStart = 0;
-            for( size_t jj = 0; jj < filtersToSigmas_.size(); ++jj ) {
-                for( size_t ii = 0; ii < sigmas_.size(); ++ii ) {
+            for( std::size_t jj = 0; jj < filtersToSigmas_.size(); ++jj ) {
+                for( std::size_t ii = 0; ii < sigmas_.size(); ++ii ) {
                     if( !filtersToSigmas_[jj][ii] )
                         continue;
                     Coord channelBase = base;
@@ -473,7 +473,7 @@ namespace detail_fastfilters {
             }
 
             // iterate over sigmas and apply filters with pre smoothing
-            for(size_t ii = 0; ii < sigmas_.size(); ++ii) {
+            for(std::size_t ii = 0; ii < sigmas_.size(); ++ii) {
                 // determine the correct sigma for pre smoothing
                 double sigma = sigmas_[ii];
                 //std::cout << "Sigma: " << ii << " = " << sigma << std::endl; 
@@ -494,7 +494,7 @@ namespace detail_fastfilters {
                 }
 
                 // apply all filters for this sigma
-                for(size_t jj = 0; jj < filtersToSigmas_.size(); ++jj) {
+                for(std::size_t jj = 0; jj < filtersToSigmas_.size(); ++jj) {
                     if( !filtersToSigmas_[jj][ii] )
                         continue;
                     //std::cout << "Filter " << jj << std::endl;
@@ -520,14 +520,14 @@ namespace detail_fastfilters {
             detail_fastfilters::convertMarray2ff(in, ff);
             
             // determine start coordinates to run in parallel
-            std::vector<std::pair<size_t,double>> filterIdAndSigmas;
+            std::vector<std::pair<std::size_t,double>> filterIdAndSigmas;
             std::vector<Coord> bases;
             int64_t channelStart = 0;
-            for( size_t ii = 0; ii < activeFilters_.size(); ++ii ) {
+            for( std::size_t ii = 0; ii < activeFilters_.size(); ++ii ) {
                 if( !activeFilters_[ii] )
                     continue;
                 const auto & activeSigmas = filtersToSigmas_[ii];
-                for( size_t jj = 0; jj < sigmas_.size(); ++jj ) {
+                for( std::size_t jj = 0; jj < sigmas_.size(); ++jj ) {
                     if( !activeSigmas[jj] )
                         continue;
                     filterIdAndSigmas.push_back(std::make_pair(ii, sigmas_[jj]));
@@ -551,7 +551,7 @@ namespace detail_fastfilters {
 
         std::vector<double> sigmas_;
         FiltersToSigmasType filtersToSigmas_;
-        std::map<size_t,FilterBase*> filters_;
+        std::map<std::size_t,FilterBase*> filters_;
         std::array<bool,4> activeFilters_;
     };
     

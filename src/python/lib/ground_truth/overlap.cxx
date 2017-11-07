@@ -83,7 +83,7 @@ namespace ground_truth{
 
                 return out;
             })
-            .def("overlapArrays", [](const OverlapType & self, const size_t index, const bool sorted){
+            .def("overlapArrays", [](const OverlapType & self, const std::size_t index, const bool sorted){
 
                 typedef nifty::marray::PyView<uint64_t>  ArrayType;
                 const auto & overlaps = self.overlaps();
@@ -126,7 +126,7 @@ namespace ground_truth{
             }, py::arg("index"),py::arg("sorted") = false
             )
 
-            .def("overlapArraysNormalized", [](const OverlapType & self, const size_t index, const bool sorted){
+            .def("overlapArraysNormalized", [](const OverlapType & self, const std::size_t index, const bool sorted){
 
                 const auto & overlaps = self.overlaps();
                 const auto & olMap = overlaps[index];

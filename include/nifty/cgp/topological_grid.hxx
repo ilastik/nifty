@@ -17,7 +17,7 @@ namespace cgp{
 
 
 
-    template<size_t DIM>
+    template<std::size_t DIM>
     class TopologicalGrid;
 
 

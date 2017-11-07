@@ -117,7 +117,7 @@ namespace hdf5{
             effectiveShape_.resize(dimension());
             offsetFront_.resize(dimension());
             offsetBack_.resize(dimension());
-            for(size_t d = 0; d < dimension(); ++d) {
+            for(std::size_t d = 0; d < dimension(); ++d) {
                 effectiveShape_[d] = shape_[d];
                 offsetFront_[d] = 0;
                 offsetBack_[d] = 0;
@@ -125,7 +125,7 @@ namespace hdf5{
         }
 
         int setCache(){
-            //herr_t H5Pset_cache(hid_t plist_id, int mdc_nelmts, size_t rdcc_nslots, size_t rdcc_nbytes, double rdcc_w0)
+            //herr_t H5Pset_cache(hid_t plist_id, int mdc_nelmts, std::size_t rdcc_nslots, std::size_t rdcc_nbytes, double rdcc_w0)
         }
 
         ~Hdf5Array(){
@@ -154,7 +154,7 @@ namespace hdf5{
         }
 
         void resetOffsets() {
-            for(size_t d = 0; d < dimension(); ++d) {
+            for(std::size_t d = 0; d < dimension(); ++d) {
                effectiveShape_[d] = shape_[d];
                offsetFront_[d] = 0;
                offsetBack_[d] = 0;
@@ -163,12 +163,12 @@ namespace hdf5{
 
         template<class OFFSET_ITERATOR>
         bool setOffsetFront(OFFSET_ITERATOR offsetIter) {
-            for(size_t d = 0; d < dimension(); ++d) {
+            for(std::size_t d = 0; d < dimension(); ++d) {
                offsetFront_[d] = *offsetIter;
                effectiveShape_[d] = shape_[d] - *offsetIter - offsetBack_[d];
                ++offsetIter;
             }
-            for(size_t d = 0; d < dimension(); ++d) {
+            for(std::size_t d = 0; d < dimension(); ++d) {
                 if(effectiveShape_[d] == 0 || effectiveShape_[d] > shape_[d]) {  // the shapes are uint, so negative shapes get mapped to high integers
                     std::cout << "Invalid offset setting, resetting all offsets to 0" << std::endl;
                     resetOffsets();
@@ -180,12 +180,12 @@ namespace hdf5{
 
         template<class OFFSET_ITERATOR>
         bool setOffsetBack(OFFSET_ITERATOR offsetIter) {
-            for(size_t d = 0; d < dimension(); ++d) {
+            for(std::size_t d = 0; d < dimension(); ++d) {
                offsetBack_[d] = *offsetIter;
                effectiveShape_[d] = shape_[d] - *offsetIter - offsetFront_[d];
                ++offsetIter;
             }
-            for(size_t d = 0; d < dimension(); ++d) {
+            for(std::size_t d = 0; d < dimension(); ++d) {
                 if(effectiveShape_[d] == 0 || effectiveShape_[d] > shape_[d]) {
                     std::cout << "Invalid offset setting, resetting all offsets to 0" << std::endl;
                     resetOffsets();
@@ -209,7 +209,7 @@ namespace hdf5{
                 "currently only views with last major order are supported"
             );
             std::vector<uint64_t> roiTmp(roiBeginIter, roiBeginIter+out.dimension());
-            for(size_t d = 0; d < out.dimension(); ++d)
+            for(std::size_t d = 0; d < out.dimension(); ++d)
                 roiTmp[d] += offsetFront_[d];
             this->loadHyperslab(roiTmp.begin(), roiTmp.end(), out.shapeBegin(), out);
         }
@@ -234,7 +234,7 @@ namespace hdf5{
                 "currently only views with last major order are supported"
             );
             std::vector<uint64_t> roiTmp(roiBeginIter, roiBeginIter+in.dimension());
-            for(size_t d = 0; d < in.dimension(); ++d)
+            for(std::size_t d = 0; d < in.dimension(); ++d)
                 roiTmp[d] += offsetFront_[d];
             this->saveHyperslab(roiTmp.begin(), roiTmp.end(), in.shapeBegin(), in);
         }

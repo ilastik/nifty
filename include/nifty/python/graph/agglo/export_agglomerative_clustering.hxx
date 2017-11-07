@@ -139,7 +139,7 @@ namespace agglo{
                 const AgglomerativeClusteringType * self
             ){
                 const auto graph = self->graph();
-                nifty::marray::PyView<uint64_t> out({size_t(graph.nodeIdUpperBound()+1)});
+                nifty::marray::PyView<uint64_t> out({std::size_t(graph.nodeIdUpperBound()+1)});
                 {
                     py::gil_scoped_release allowThreds;
                     self->result(out);

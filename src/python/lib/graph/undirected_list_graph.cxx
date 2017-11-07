@@ -33,7 +33,7 @@ namespace graph{
                 [](Graph & g, nifty::marray::PyView<uint64_t> array) {
                     NIFTY_CHECK_OP(array.dimension(),==,2,"wrong dimensions");
                     NIFTY_CHECK_OP(array.shape(1),==,2,"wrong shape");
-                    for(size_t i=0; i<array.shape(0); ++i){
+                    for(std::size_t i=0; i<array.shape(0); ++i){
                         g.insertEdge(array(i,0),array(i,1));
                     }
                 }

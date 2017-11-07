@@ -53,7 +53,7 @@ namespace lifted_multicut{
                 NIFTY_CHECK_OP(uvIds.shape(1),==,2,"wrong shape");
                 NIFTY_CHECK_OP(uvIds.shape(0),==,weights.shape(0),"wrong shape");
 
-                for(size_t i=0; i<uvIds.shape(0); ++i){
+                for(std::size_t i=0; i<uvIds.shape(0); ++i){
                     objective.setCost(uvIds(i,0), uvIds(i,1), weights(i),overwrite);
                 }
                 
@@ -147,7 +147,7 @@ namespace lifted_multicut{
                     self.insertLiftedEdgesBfs(maxDistance, dist);
                     nifty::marray::PyView<uint64_t> array({dist.size()});
 
-                    for(size_t i=0; i<dist.size(); ++i){
+                    for(std::size_t i=0; i<dist.size(); ++i){
                         array(i) = dist[i];
                     }
                     return array;

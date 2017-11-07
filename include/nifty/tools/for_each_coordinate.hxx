@@ -182,7 +182,7 @@ namespace tools{
         }
     }
 
-    template<class SHAPE_T, size_t DIMENSIONS, class F>
+    template<class SHAPE_T, std::size_t DIMENSIONS, class F>
     void forEachCoordinate(
         const array::StaticArray<SHAPE_T, DIMENSIONS> & shape,
         F && f,
@@ -191,7 +191,7 @@ namespace tools{
         forEachCoordinateImpl(shape, f, firstCoordinateMajorOrder);
     }
 
-    template<class SHAPE_T, size_t DIMENSIONS, class F>
+    template<class SHAPE_T, std::size_t DIMENSIONS, class F>
     void forEachCoordinate(
         const array::StaticArray<SHAPE_T, DIMENSIONS> & shapeBegin,
         const array::StaticArray<SHAPE_T, DIMENSIONS> & shapeEnd,
@@ -204,7 +204,7 @@ namespace tools{
 
 
 
-    template<class SHAPE_T, size_t DIM, class F>
+    template<class SHAPE_T, std::size_t DIM, class F>
     void parallelForEachCoordinate(
         nifty::parallel::ThreadPool & threadpool,                   
         const array::StaticArray<SHAPE_T, DIM> & shape,

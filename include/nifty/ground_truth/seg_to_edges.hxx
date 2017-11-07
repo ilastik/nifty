@@ -24,7 +24,7 @@ namespace ground_truth{
 
 
         CoordType shape;
-        for(size_t i=0; i<2; ++i){
+        for(std::size_t i=0; i<2; ++i){
             shape[i] = segmentation.shape(i);
         }   
 

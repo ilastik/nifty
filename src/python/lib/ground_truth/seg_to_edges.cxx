@@ -21,8 +21,8 @@ namespace ground_truth{
             marray::PyView<uint32_t, 2 >   seg
         ){
             marray::PyView<uint8_t> out({
-                size_t(seg.shape(0)),
-                size_t(seg.shape(1)),
+                std::size_t(seg.shape(0)),
+                std::size_t(seg.shape(1)),
             }); 
         
             segToEdges2D(seg, out);

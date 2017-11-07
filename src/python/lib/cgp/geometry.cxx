@@ -16,8 +16,8 @@ namespace cgp{
     
 
     template<
-        size_t DIM, 
-        size_t CELL_TYPE,
+        std::size_t DIM, 
+        std::size_t CELL_TYPE,
         class CLS
     >
     void exportCellGeometryT(py::module & m, py::class_<CLS> & pyCls) {
@@ -31,10 +31,10 @@ namespace cgp{
             })
             .def("centerOfMass",&CLS::centerOfMass)
             .def("__array__", [](const CLS & self){
-                nifty::marray::PyView<uint32_t> out({size_t(self.size()),size_t(DIM)});
-                for(size_t i=0; i<self.size(); ++i){
+                nifty::marray::PyView<uint32_t> out({std::size_t(self.size()),std::size_t(DIM)});
+                for(std::size_t i=0; i<self.size(); ++i){
                     const auto & coord = self[i];
-                    for(size_t d=0; d<DIM; ++d){
+                    for(std::size_t d=0; d<DIM; ++d){
                         out(i, d) = coord[d];
                     }
                 }

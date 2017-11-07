@@ -33,7 +33,7 @@ namespace graph{
     }
 
 
-    template<size_t DIM, class LABELS>
+    template<std::size_t DIM, class LABELS>
     void exportExpilictGridRagT(
         py::module & ragModule,
         const std::string & clsName,
@@ -95,7 +95,7 @@ namespace graph{
     }
 
     #ifdef WITH_HDF5
-    template<size_t DIM, class LABELS>
+    template<std::size_t DIM, class LABELS>
     void exportHdf5GridRagT(
         py::module & ragModule,
         const std::string & clsName,

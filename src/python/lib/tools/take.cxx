@@ -43,7 +43,7 @@ namespace tools{
 
 
                 timer.startAndPrint("work");
-                for(size_t i=0; i<toRelabel.shape(0); ++i){
+                for(std::size_t i=0; i<toRelabel.shape(0); ++i){
                     out(i) = relabeling(toRelabel(i));
                 }
 
@@ -53,7 +53,7 @@ namespace tools{
                 //auto po = &out[0];
                 //auto pr = &relabeling[0];
                 //auto pt = & toRelabel[0];
-                //for(size_t i=0; i<toRelabel.shape(0); ++i){
+                //for(std::size_t i=0; i<toRelabel.shape(0); ++i){
                 //    po[i] = pr[pt[i]];
                 //}
 

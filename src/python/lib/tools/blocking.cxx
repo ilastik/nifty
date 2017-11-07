@@ -16,7 +16,7 @@ namespace nifty{
 namespace tools{
 
 
-    template<size_t DIM>
+    template<std::size_t DIM>
     void exportBlockingT(py::module & toolsModule){
         const auto dimStr = std::to_string(DIM) + std::string("d");
 
@@ -105,8 +105,8 @@ namespace tools{
 
             .def("getLocalOverlaps", [](
                 const BlockingType & self,
-                const size_t indexA,
-                const size_t indexB,
+                const std::size_t indexA,
+                const std::size_t indexB,
                 const VectorType blockHalo) {
 
                 VectorType blockABegin, blockBBegin, blockAEnd, blockBEnd;
@@ -120,7 +120,7 @@ namespace tools{
 
             .def("getBlockWithHalo", [](
                     const BlockingType & self,
-                    const size_t blockIndex,
+                    const std::size_t blockIndex,
                     const VectorType halo
                 ){
                     return self.getBlockWithHalo(blockIndex, halo);
@@ -129,7 +129,7 @@ namespace tools{
             )
             .def("getBlockWithHalo", [](
                     const BlockingType & self,
-                    const size_t blockIndex,
+                    const std::size_t blockIndex,
                     const VectorType haloBegin,
                     const VectorType haloEnd
                 ){

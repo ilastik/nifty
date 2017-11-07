@@ -35,18 +35,18 @@ namespace detail{
 
     // to avoid the include of pybind/stl.h
     // we re-implement the array_caster
-    template <typename ArrayType, typename Value, bool Resizable, size_t Size = 0> struct array_caster_ {
+    template <typename ArrayType, typename Value, bool Resizable, std::size_t Size = 0> struct array_caster_ {
         using value_conv = make_caster<Value>;
 
     private:
         template <bool R = Resizable>
-        bool require_size(enable_if_t<R, size_t> size) {
+        bool require_size(enable_if_t<R, std::size_t> size) {
             if (value.size() != size)
                 value.resize(size);
             return true;
         }
         template <bool R = Resizable>
-        bool require_size(enable_if_t<!R, size_t> size) {
+        bool require_size(enable_if_t<!R, std::size_t> size) {
             return size == Size;
         }
 
@@ -58,7 +58,7 @@ namespace detail{
             if (!require_size(l.size()))
                 return false;
             value_conv conv;
-            size_t ctr = 0;
+            std::size_t ctr = 0;
             for (auto it : l) {
                 if (!conv.load(it, convert))
                     return false;
@@ -69,7 +69,7 @@ namespace detail{
 
         static handle cast(const ArrayType &src, return_value_policy policy, handle parent) {
             list l(src.size());
-            size_t index = 0;
+            std::size_t index = 0;
             for (auto const &value: src) {
                 auto value_ = reinterpret_steal<object>(value_conv::cast(value, policy, parent));
                 if (!value_)
@@ -98,13 +98,13 @@ namespace detail{
 
 
 
-    template <typename Type, size_t Size>
+    template <typename Type, std::size_t Size>
     struct type_caster< nifty::array::StaticArray<Type, Size> >
     : array_caster_< nifty::array::StaticArray<Type, Size>, Type, false, Size> {
     };
 
 
-    template <typename Type, size_t DIM, bool AUTO_CAST_TYPE>
+    template <typename Type, std::size_t DIM, bool AUTO_CAST_TYPE>
     struct pymarray_caster;
 
 
@@ -161,7 +161,7 @@ namespace nifty
 namespace marray
 {
 
-    template <typename VALUE_TYPE, size_t DIM = 0, bool AUTO_CAST_TYPE=true>
+    template <typename VALUE_TYPE, std::size_t DIM = 0, bool AUTO_CAST_TYPE=true>
     class PyView : public View<VALUE_TYPE, false>
     {
         friend struct pybind11::detail::pymarray_caster<VALUE_TYPE,DIM, AUTO_CAST_TYPE>;
@@ -187,8 +187,8 @@ namespace marray
             auto info = py_array.request();
             VALUE_TYPE *ptr = (VALUE_TYPE *)info.ptr;
 
-            std::vector<size_t> strides(info.strides.begin(),info.strides.end());
-            for(size_t i=0; i<strides.size(); ++i){
+            std::vector<std::size_t> strides(info.strides.begin(),info.strides.end());
+            for(std::size_t i=0; i<strides.size(); ++i){
                 strides[i] /= sizeof(VALUE_TYPE);
             }
             this->assign( info.shape.begin(), info.shape.end(), strides.begin(), ptr, FirstMajorOrder);
@@ -251,8 +251,8 @@ namespace marray
         void assignFromShape(ShapeIterator begin, ShapeIterator end)
         {
             //std::cout<<"compute stride\n";
-            std::vector<size_t> shape(begin,end);
-            std::vector<size_t> strides(shape.size());
+            std::vector<std::size_t> shape(begin,end);
+            std::vector<std::size_t> strides(shape.size());
 
             strides.resize(shape.size());
             strides.back() = sizeof(VALUE_TYPE);
@@ -274,7 +274,7 @@ namespace marray
                 //std::cout<<"dpme\n";
             }
             //std::cout<<"scoped gil_scoped_acquire_DONE\n";
-            for (size_t i = 0; i < shape.size(); ++i) {
+            for (std::size_t i = 0; i < shape.size(); ++i) {
                 strides[i] /= sizeof(VALUE_TYPE);
             }
             this->assign(begin, end, strides.begin(), ptr, FirstMajorOrder);
@@ -284,8 +284,8 @@ namespace marray
 
         void createViewFrom(const nifty::marray::View<VALUE_TYPE> & view)
         {
-            std::vector<size_t> shape(view.shapeBegin(), view.shapeEnd());
-            std::vector<size_t> strides(shape.size());
+            std::vector<std::size_t> shape(view.shapeBegin(), view.shapeEnd());
+            std::vector<std::size_t> strides(shape.size());
 
             strides.resize(shape.size());
             strides.back() = sizeof(VALUE_TYPE);
@@ -299,7 +299,7 @@ namespace marray
             pybind11::buffer_info info = py_array.request();
             VALUE_TYPE *ptr = (VALUE_TYPE *)info.ptr;
 
-            for (size_t i = 0; i < shape.size(); ++i) {
+            for (std::size_t i = 0; i < shape.size(); ++i) {
                 strides[i] /= sizeof(VALUE_TYPE);
             }
             this->assign(shape.begin(), shape.end(), view.stridesBegin(), ptr, FirstMajorOrder);
@@ -310,7 +310,7 @@ namespace marray
 }
 
 
-template <typename VALUE_TYPE, size_t DIM,  bool AUTO_CAST_TYPE>
+template <typename VALUE_TYPE, std::size_t DIM,  bool AUTO_CAST_TYPE>
 std::ostream& operator<<(
     std::ostream& os,
     const nifty::marray::PyView<VALUE_TYPE, DIM, AUTO_CAST_TYPE> & obj
@@ -326,7 +326,7 @@ namespace tools{
     template<class ARRAY>
     struct BlockStorageSelector;
 
-    template<class T, size_t DIM, bool AUTO_CAST_TYPE>
+    template<class T, std::size_t DIM, bool AUTO_CAST_TYPE>
     struct BlockStorageSelector<marray::PyView<T, DIM, AUTO_CAST_TYPE> >
     {
        typedef BlockView<T> type;
@@ -343,7 +343,7 @@ namespace pybind11
 
 
 
-        template <typename Type, size_t DIM, bool AUTO_CAST_TYPE>
+        template <typename Type, std::size_t DIM, bool AUTO_CAST_TYPE>
         struct pymarray_caster {
             typedef typename nifty::marray::PyView<Type, DIM, AUTO_CAST_TYPE> ViewType;
             typedef type_caster<typename intrinsic_type<Type>::type> value_conv;
@@ -402,12 +402,12 @@ namespace pybind11
             PYBIND11_TYPE_CASTER(ViewType, _("array<") + value_conv::name() + _(">"));
         };
 
-        template <typename Type, size_t DIM, bool AUTO_CAST_TYPE>
+        template <typename Type, std::size_t DIM, bool AUTO_CAST_TYPE>
         struct type_caster<nifty::marray::PyView<Type, DIM, AUTO_CAST_TYPE> >
             : pymarray_caster<Type,DIM, AUTO_CAST_TYPE> {
         };
 
-        //template <typename Type, size_t DIM>
+        //template <typename Type, std::size_t DIM>
         //struct marray_caster {
         //    static_assert(std::is_same<Type, void>::value,
         //                  "Please use nifty::marray::PyView instead of nifty::marray::View for arguments and return values.");
@@ -437,8 +437,8 @@ namespace pybind11
 namespace nifty{
 
     template<class T>
-    std::vector<size_t> toSizeT(std::initializer_list<T> l){
-        return std::vector<size_t>(l.begin(),l.end());
+    std::vector<std::size_t> toSizeT(std::initializer_list<T> l){
+        return std::vector<std::size_t>(l.begin(),l.end());
     }
 
 

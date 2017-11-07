@@ -18,7 +18,7 @@ namespace nifty{
 namespace graph{
 
 
-    template<size_t DIM>
+    template<std::size_t DIM>
     void exportUndirectedGridGraphT(py::module & module) {
 
         typedef UndirectedGridGraph<DIM,true> GraphType;
@@ -143,9 +143,9 @@ namespace graph{
                     g.longRangeAffinitiesToLiftedEdges(affinities, edgeMap, ranges.begin(), axes.begin());
                     // extract edge values and lifted uv-ides from the edge map
                     nifty::marray::PyView<float, 1> values({edgeMap.size()});
-                    std::vector<size_t> uvShape = {edgeMap.size(), 2};
+                    std::vector<std::size_t> uvShape = {edgeMap.size(), 2};
                     nifty::marray::PyView<float, 2> liftedUvs(uvShape.begin(), uvShape.end());
-                    size_t i = 0;
+                    std::size_t i = 0;
                     for(const auto & mapVal : edgeMap) {
                         values[i] = mapVal.second;
                         liftedUvs[i,0] = mapVal.first.first;

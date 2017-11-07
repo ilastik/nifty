@@ -50,8 +50,8 @@ namespace marray
             auto info = py_array.request();
             Type *ptr = (Type *)info.ptr;
 
-            std::vector<size_t> strides(info.strides.begin(),info.strides.end());
-            for(size_t i=0; i<strides.size(); ++i){
+            std::vector<std::size_t> strides(info.strides.begin(),info.strides.end());
+            for(std::size_t i=0; i<strides.size(); ++i){
                 strides[i] /= sizeof(Type);
             }
             this->assign( info.shape.begin(), info.shape.end(), strides.begin(), ptr, FirstMajorOrder);
@@ -69,14 +69,14 @@ namespace marray
         }
         template <class ShapeIterator> PyView(ShapeIterator begin, ShapeIterator end)
         {
-            std::vector<size_t> shape, strides;
+            std::vector<std::size_t> shape, strides;
 
             for (auto i = begin; i != end; ++i)
                 shape.push_back(*i);
 
-            for (size_t i = 0; i < shape.size(); ++i) {
-                size_t stride = sizeof(Type);
-                for (size_t j = i + 1; j < shape.size(); ++j)
+            for (std::size_t i = 0; i < shape.size(); ++i) {
+                std::size_t stride = sizeof(Type);
+                for (std::size_t j = i + 1; j < shape.size(); ++j)
                     stride *= shape[j];
                 strides.push_back(stride);
             }
@@ -86,7 +86,7 @@ namespace marray
             pybind11::buffer_info info = py_array.request();
             Type *ptr = (Type *)info.ptr;
 
-            for (size_t i = 0; i < shape.size(); ++i) {
+            for (std::size_t i = 0; i < shape.size(); ++i) {
                 strides[i] /= sizeof(Type);
             }
             this->assign(begin, end, strides.begin(), ptr, LastMajorOrder);
@@ -182,8 +182,8 @@ namespace pybind11
 namespace nifty{
 
     template<class T>
-    std::vector<size_t> toSizeT(std::initializer_list<T> l){
-        return std::vector<size_t>(l.begin(),l.end());
+    std::vector<std::size_t> toSizeT(std::initializer_list<T> l){
+        return std::vector<std::size_t>(l.begin(),l.end());
     }
 
 

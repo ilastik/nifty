@@ -20,7 +20,7 @@ namespace cgp{
         Cell1BasicTopologicalFeatures(){
         }
 
-        size_t numberOfFeatures()const{
+        std::size_t numberOfFeatures()const{
             return 6;
         }
             
@@ -95,7 +95,7 @@ namespace cgp{
         
         }
     private:
-        std::vector<size_t> dists_;
+        std::vector<std::size_t> dists_;
     };
 
 

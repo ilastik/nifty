@@ -145,8 +145,8 @@ namespace multicut{
         typedef andres::graph::multicut::KernighanLinSettings KlSettings;
 
         struct SettingsType {
-            size_t numberOfInnerIterations { std::numeric_limits<size_t>::max() };
-            size_t numberOfOuterIterations { 100 };
+            std::size_t numberOfInnerIterations { std::numeric_limits<std::size_t>::max() };
+            std::size_t numberOfOuterIterations { 100 };
             double epsilon { 1e-6 };
             bool verbose { false };
             bool greedyWarmstart{true};

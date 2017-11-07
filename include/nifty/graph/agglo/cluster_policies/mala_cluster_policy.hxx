@@ -55,7 +55,7 @@ public:
 private:
 
     // internal types
-    const static size_t NumberOfBins = 20;
+    const static std::size_t NumberOfBins = 20;
     typedef std::array<float, NumberOfBins> HistogramType;     
     typedef typename GRAPH:: template EdgeMap<HistogramType> EdgeHistogramMap;
 
@@ -171,7 +171,7 @@ MalaClusterPolicy(
         edgeSizes_[edge] = size;
 
         // put in histogram
-        auto bin = std::min(size_t(val*float(NumberOfBins)), size_t(NumberOfBins-1));
+        auto bin = std::min(std::size_t(val*float(NumberOfBins)), std::size_t(NumberOfBins-1));
         auto & hist = histograms_[edge];
         std::fill(hist.begin(), hist.end(), 0.0);
         hist[bin] = size;

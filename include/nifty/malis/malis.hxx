@@ -15,8 +15,8 @@ namespace malis{
 template<unsigned DIM, typename DATA_TYPE, typename LABEL_TYPE>
 void compute_malis_gradient(const marray::View<DATA_TYPE> & affinities,
         const marray::View<LABEL_TYPE> & groundtruth,
-        marray::View<size_t> & positiveGradients,
-        marray::View<size_t> & negativeGradients) { // TODO which dtype / output format for the gradients ?
+        marray::View<std::size_t> & positiveGradients,
+        marray::View<std::size_t> & negativeGradients) { // TODO which dtype / output format for the gradients ?
     
     typedef nifty::array::StaticArray<int64_t,DIM>   Coord;
     typedef nifty::array::StaticArray<int64_t,DIM+1> AffinityCoord;
@@ -41,7 +41,7 @@ void compute_malis_gradient(const marray::View<DATA_TYPE> & affinities,
         pixelShape[d] = groundtruth.shape(d);
     // init union find and overlaps
     ufd::Ufd<LabelType> sets(numberOfNodes);
-    std::vector<std::map<LabelType,size_t>> overlaps(numberOfNodes);
+    std::vector<std::map<LabelType,std::size_t>> overlaps(numberOfNodes);
     int pixelIndex;
     tools::forEachCoordinate(pixelShape, [&](Coord coord) {
         auto gtId = groundtruth(coord.asStdArray());
@@ -60,27 +60,27 @@ void compute_malis_gradient(const marray::View<DATA_TYPE> & affinities,
     for(int d = 0; d < DIM+1; ++d)
         affinityShape[d] = affinities.shape(d);
     // get a flattened view to the marray
-    size_t flatShape[] = {affinities.size()};
+    std::size_t flatShape[] = {affinities.size()};
     auto flatView = affinities.reshapedView(flatShape, flatShape+1);
     // initialize the pqueu as [0,1,2,3,...,numberOfEdges]
-    std::vector<size_t> pqueue(numberOfEdges);
+    std::vector<std::size_t> pqueue(numberOfEdges);
     std::iota(pqueue.begin(), pqueue.end(), 0);
     // sort pqueue in increasing order
     std::sort(pqueue.begin(), pqueue.end(),
-            [&flatView](const size_t ind1, const size_t ind2){
+            [&flatView](const std::size_t ind1, const std::size_t ind2){
         return (flatView(ind1)>flatView(ind2));         
     });
 
     // run kruskals
-    size_t edgeIndex, channel;
+    std::size_t edgeIndex, channel;
     LabelType setU, setV;
-    size_t nPair = 0;
+    std::size_t nPair = 0;
     Coord gtCoordU, gtCoordV;
     AffinityCoord affCoord;
-    typename std::map<LabelType,size_t>::iterator itU, itV;
+    typename std::map<LabelType,std::size_t>::iterator itU, itV;
 
     // iterate over the pqueue
-    for(size_t i = 0; i < pqueue.size(); ++i) {
+    for(std::size_t i = 0; i < pqueue.size(); ++i) {
         
         edgeIndex  = pqueue[i];
         

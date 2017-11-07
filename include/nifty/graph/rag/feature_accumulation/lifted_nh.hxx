@@ -45,7 +45,7 @@ private:
 
     std::vector<int> ranges_;
     std::vector<int> axes_;
-    std::vector<size_t> lrIndices_;
+    std::vector<std::size_t> lrIndices_;
 };
 
 
@@ -61,32 +61,32 @@ void LiftedNh<RAG>::initLiftedNh(
     // set the number of nodes in the graph == number of labels
     BaseType::assign(rag.labelsProxy().numberOfLabels());
     Coord3 shape;
-    for(size_t d = 0; d < 3; ++d) {
+    for(std::size_t d = 0; d < 3; ++d) {
         shape[d] = labels.shape(d);
     }
 
     // TODO parallelize properly
     // threadpool and actual number of threads
     //nifty::parallel::ThreadPool threadpool(numberOfThreads);
-    //const size_t nThreads = threadpool.nThreads();
+    //const std::size_t nThreads = threadpool.nThreads();
 
     //
     // get the lr edges (== ranges with abs value bigger than 1)
     //
 
-    for(size_t ii = 0; ii < ranges_.size(); ++ii) {
+    for(std::size_t ii = 0; ii < ranges_.size(); ++ii) {
         if(std::abs(ranges_[ii]) > 1) {
             lrIndices_.push_back(ii);
         }
     }
 
     // number of links = number of lr channels * number of pixels
-    size_t nLinks = lrIndices_.size() * labels.size();
+    std::size_t nLinks = lrIndices_.size() * labels.size();
 
     // FIXME super dirty hack to get the index to offsets translator from marray
     Coord4 affShape;
     affShape[0] = lrIndices_.size();
-    for(size_t d = 0; d < 3; ++d) {
+    for(std::size_t d = 0; d < 3; ++d) {
         affShape[d+1] = shape[d];
     }
 
@@ -100,13 +100,13 @@ void LiftedNh<RAG>::initLiftedNh(
     Coord4 affCoord;
     Coord3 cU, cV;
     int axis, range, lrId;
-    for(size_t linkId = 0; linkId < nLinks; ++linkId) {
+    for(std::size_t linkId = 0; linkId < nLinks; ++linkId) {
         fakeAffinities.indexToCoordinates(linkId, affCoord.begin());
         lrId = lrIndices_[affCoord[0]];
         axis  = axes_[lrId];
         range = ranges_[lrId];
 
-        for(size_t d = 0; d < 3; ++d) {
+        for(std::size_t d = 0; d < 3; ++d) {
             cU[d] = affCoord[d+1];
             cV[d] = affCoord[d+1];
         }
