@@ -183,7 +183,7 @@ NIFTY_MODULE_SO=${PREFIX}/lib/python${PY_VER}/site-packages/nifty/_nifty.so
 ##
 ## Rename the python module entirely, and change cplex lib install names.
 ##
-if [[ "$WITH_CPLEX" != "" ]]; then
+if [[ "$WITH_CPLEX" == "1" ]]; then
     (
         if [ `uname` == "Darwin" ]; then
             # Set install names according using @rpath
@@ -201,7 +201,7 @@ fi
 ##
 ## Rename the python module entirely, and change cplex lib install names.
 ##
-if [[ "$WITH_GUROBI" != "" ]]; then
+if [[ "$WITH_GUROBI" == "1" ]]; then
     (
         if [ `uname` == "Darwin" ]; then
             # Set install name according using @rpath
