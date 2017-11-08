@@ -6,9 +6,6 @@
 ## - PREFIX, PYTHON, CPU_COUNT, etc. (as defined by conda-build)
 
 # Convert '0' to empty (all code below treats non-empty as True)
-if [[ "$WITH_CPLEX" == "0" ]]; then
-    WITH_CPLEX=""
-fi
 
 # Platform-specific dylib extension
 if [ $(uname) == "Darwin" ]; then
@@ -22,7 +19,7 @@ else
 fi
 
 # Pre-define special flags, paths, etc. if we're building with CPLEX support.
-if [[ "$WITH_CPLEX" == "" ]]; then
+if [[ "$WITH_CPLEX" == "0" ]]; then
     CPLEX_ARGS=""
     LINKER_FLAGS=""
 else
@@ -97,7 +94,7 @@ else
     CPLEX_ARGS="${CPLEX_ARGS} -DCPLEX_BIN_DIR=${CPLEX_CONCERT_LIBRARY}"
 fi
 
-if [[ "$WITH_GUROBI" == "" ]]; then
+if [[ "$WITH_GUROBI" == "0" ]]; then
     GUROBI_ARGS=""
     LINKER_FLAGS=""
 else
