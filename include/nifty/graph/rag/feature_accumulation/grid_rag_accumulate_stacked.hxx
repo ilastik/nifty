@@ -187,7 +187,7 @@ namespace graph{
 
         uint64_t numberOfSlices = shape[0];
         const Coord2 sliceShape2({shape[1], shape[2]});
-        const Coord  sliceShape3({1LL,shape[1], shape[2]});
+        const Coord  sliceShape3({int64_t(1),shape[1], shape[2]});
 
         // For now, we only support single pass!
         // do N passes of accumulator
@@ -204,8 +204,8 @@ namespace graph{
             DataCopyStorage dataBCopyStorage(threadpool, sliceShape2, nThreads);
 
             // process slice 0 to find min and max for histogram opts
-            Coord begin0({0LL, 0LL, 0LL});
-            Coord end0(  {1LL, shape[1], shape[2]});
+            Coord begin0({int64_t(0), int64_t(0), int64_t(0)});
+            Coord end0(  {int64_t(1), shape[1], shape[2]});
 
             auto data0 = dataAStorage.getView(0);
             tools::readSubarray(data, begin0, end0, data0);
@@ -235,7 +235,7 @@ namespace graph{
                 int64_t sliceIdB = slicePairs[pairId].second;// upper slice
 
                 // compute the filters for slice A
-                Coord beginA ({sliceIdA, 0LL, 0LL});
+                Coord beginA ({sliceIdA, int64_t(0), int64_t(0)});
                 Coord endA({sliceIdA+1, shape[1], shape[2]});
 
                 auto labelsA = labelsAStorage.getView(tid);
@@ -273,7 +273,7 @@ namespace graph{
 
                 // process upper slice
                 // TODO copy non-float data ?!
-                Coord beginB = Coord({sliceIdB,   0LL,       0LL});
+                Coord beginB = Coord({sliceIdB,   int64_t(0),       int64_t(0)});
                 Coord endB   = Coord({sliceIdB+1, shape[1], shape[2]});
                 marray::View<LabelType> labelsBSqueezed;
                 marray::View<DataType> dataBSqueezed;
@@ -400,7 +400,7 @@ namespace graph{
                     featuresTemp(edge, 2+qi) = replaceIfNotFinite(quantiles[qi], mean);
             }
 
-            FeatCoord begin({int64_t(edgeOffset),0LL});
+            FeatCoord begin({int64_t(edgeOffset),int64_t(0)});
             FeatCoord end({edgeOffset+nEdges, nStats});
 
             tools::writeSubarray(edgeFeaturesOut, begin, end, featuresTemp);
@@ -475,7 +475,7 @@ namespace graph{
         const auto & labelsProxy = rag.labelsProxy();
 
         Coord2 sliceShape2({shape[1], shape[2]});
-        Coord sliceShape3({1LL,shape[1], shape[2]});
+        Coord sliceShape3({int64_t(1),shape[1], shape[2]});
 
         LabelBlockStorage labelsAStorage(threadpool, sliceShape3, 1);
         LabelBlockStorage labelsBStorage(threadpool, sliceShape3, 1);
@@ -520,7 +520,7 @@ namespace graph{
             std::cout << countSlice++ << " / " << lowerSlices.size() << std::endl;
             std::cout << "Computing lengths for skip edges from slice " << sliceId << std::endl;
 
-            Coord beginA({int64_t(sliceId),0LL,0LL});
+            Coord beginA({int64_t(sliceId),int64_t(0),int64_t(0)});
             Coord endA(  {int64_t(sliceId+1),shape[1],shape[2]});
             auto labelsA = labelsAStorage.getView(0);
             labelsProxy.readSubarray(beginA, endA, labelsA);
@@ -535,7 +535,7 @@ namespace graph{
             for(auto nextId : skipSlices[sliceId] ) {
                 std::cout << "to slice " << nextId << std::endl;
 
-                beginB = Coord({int64_t(nextId),0LL,0LL});
+                beginB = Coord({int64_t(nextId),int64_t(0),int64_t(0)});
                 endB   = Coord({int64_t(nextId+1),shape[1],shape[2]});
 
                 auto labelsB = labelsBStorage.getView(0);

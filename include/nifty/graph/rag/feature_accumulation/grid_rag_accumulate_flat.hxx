@@ -128,7 +128,7 @@ void accumulateEdgeFeaturesFlatWithAccChain(
     uint64_t numberOfSlices = shape[0];
 
     Coord2 sliceShape2({shape[1], shape[2]});
-    Coord sliceShape3({1LL, shape[1], shape[2]});
+    Coord sliceShape3({int64_t(1), shape[1], shape[2]});
 
     // edge acc vectors for multiple threads
     std::vector<AccChainVectorType> perThreadAccChainVector(actualNumberOfThreads);
@@ -178,7 +178,7 @@ void accumulateEdgeFeaturesFlatWithAccChain(
             //std::cout << "Upper: " << sliceIdA << " Lower: " << sliceIdB << std::endl;
             auto & threadAccChainVec = perThreadAccChainVector[tid];
 
-            Coord beginA ({sliceIdA, 0LL, 0LL});
+            Coord beginA ({sliceIdA, int64_t(0), int64_t(0)});
             Coord endA({sliceIdA+1, shape[1], shape[2]});
 
             auto labelsA = labelsAStorage.getView(tid);
@@ -200,7 +200,7 @@ void accumulateEdgeFeaturesFlatWithAccChain(
             );
 
             // process upper slice
-            Coord beginB = Coord({sliceIdB,   0LL,       0LL});
+            Coord beginB = Coord({sliceIdB,   int64_t(0),       int64_t(0)});
             Coord endB   = Coord({sliceIdB+1, shape[1], shape[2]});
             marray::View<LabelType> labelsBSqueezed;
 

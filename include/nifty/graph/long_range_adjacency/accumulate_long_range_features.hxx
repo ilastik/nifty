@@ -90,8 +90,8 @@ void accumulateLongRangeFeaturesWithAccChain(
     const bool affsToUpper = zDirection == 1;
 
     Coord2 sliceShape2({shape[1], shape[2]});
-    Coord3 sliceShape3({1LL, shape[1], shape[2]});
-    Coord4 sliceShape4({1LL, 1LL, shape[1], shape[2]});
+    Coord3 sliceShape3({int64_t(1), shape[1], shape[2]});
+    Coord4 sliceShape4({int64_t(1), int64_t(1), shape[1], shape[2]});
 
     const int pass = 1;
     {
@@ -114,7 +114,7 @@ void accumulateLongRangeFeaturesWithAccChain(
             }
             const std::size_t edgeOffset = adj.edgeOffset(slice);
 
-            Coord3 beginA({slice, 0LL, 0LL});
+            Coord3 beginA({slice, int64_t(0), int64_t(0)});
             Coord3 endA({slice + 1, shape[1], shape[2]});
 
             auto labelsA = labelsAStorage.getView(tid);
@@ -123,8 +123,8 @@ void accumulateLongRangeFeaturesWithAccChain(
 
             // initialize the affinity storage and coordinates
             auto affs = affinityStorage.getView(tid);
-            Coord4 beginAff({0LL, 0LL, 0LL, 0LL});
-            Coord4 endAff({0LL, 0LL, shape[1], shape[2]});
+            Coord4 beginAff({int64_t(0), int64_t(0), int64_t(0), int64_t(0)});
+            Coord4 endAff({int64_t(0), int64_t(0), shape[1], shape[2]});
 
             // init view for labelsB
             auto labelsB = labelsBStorage.getView(tid);
@@ -161,7 +161,7 @@ void accumulateLongRangeFeaturesWithAccChain(
                 auto affsSqueezed = affs.squeezedView();
 
                 // read upper labels
-                Coord3 beginB({targetSlice,   0LL,       0LL});
+                Coord3 beginB({targetSlice,   int64_t(0),       int64_t(0)});
                 Coord3 endB({targetSlice + 1, shape[1], shape[2]});
                 tools::readSubarray(labels, beginB, endB, labelsB);
                 auto labelsBSqueezed = labelsB.squeezedView();
@@ -239,7 +239,7 @@ void accumulateLongRangeFeatures(
                 featuresTemp(edge, 2+qi) = replaceIfNotFinite(quantiles[qi], mean);
         }
 
-        FeatCoord begin({int64_t(edgeOffset),0LL});
+        FeatCoord begin({int64_t(edgeOffset),int64_t(0)});
         FeatCoord end({edgeOffset+nEdges, nStats});
 
         tools::writeSubarray(featuresOut, begin, end, featuresTemp);
