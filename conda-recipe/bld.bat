@@ -19,15 +19,23 @@ IF "%WITH_GUROBI%" == "1" (
     ) ELSE (
         ECHO "Using GUROBI_ROOT_DIR=%GUROBI_ROOT_DIR%"
     )
+    IF NOT DEFINED GUROBI_ROOT_DIR (
+        ECHO "GUROBI_LIB_WIN must be set for building!"
+        exit 1
+    )
+    IF "%GUROBI_LIB_WIN%" == "" (
+        ECHO "GUROBI_LIB_WIN cannot be empty for building!"
+        exit 1
+    )
     REM if we build with Gurobi, we need to configure the paths.
-    REM MHT chooses gurobi first if that is configured.
     REM The GUROBI_ROOT_DIR should point to gurobiXYZ\win64
-    dir "%GUROBI_ROOT_DIR%\lib\gurobi*.lib" /s/b | findstr gurobi[0-9][0-9].lib > gurobilib.tmp
-    set /p GUROBI_LIB=<gurobilib.tmp
-    ECHO found gurobi lib %GUROBI_LIB%
+    ECHO "found gurobi lib %GUROBI_LIB_WIN%"
     SET OPTIMIZER_ARGS=-DWITH_GUROBI=ON -DGUROBI_ROOT_DIR=%GUROBI_ROOT_DIR% ^
-      -DGUROBI_LIBRARY=%GUROBI_LIB% -DGUROBI_INCLUDE_DIR=%GUROBI_ROOT_DIR%\include ^
-      -DGUROBI_CXX_LIBRARY=%GUROBI_ROOT_DIR%\lib\gurobi_c++md2015.lib
+      -DGUROBI_LIBRARY=%GUROBI_LIB_WIN% -DGUROBI_INCLUDE_DIR=%GUROBI_ROOT_DIR%\include ^
+      -DGUROBI_CPP_LIBRARY=%GUROBI_ROOT_DIR%\lib\gurobi_c++md2015.lib
+    rem set GUROBI_LIB=%%i
+    rem dir "%GUROBI_ROOT_DIR%\lib\gurobi*.lib" /s/b|findstr gurobi[0-9][0-9].lib>gurobilib.tmp
+    rem set /p GUROBI_LIB=<gurobilib.tmp
 ) 
 
 IF "%WITH_CPLEX" == "1" (
@@ -60,3 +68,16 @@ cmake --build . --target ALL_BUILD --config %CONFIGURATION%
 if errorlevel 1 exit 1
 cmake --build . --target INSTALL --config %CONFIGURATION%
 if errorlevel 1 exit 1
+
+
+IF "%WITH_GUROBI%" == "1" (
+    REM Rename the nifty package to 'nifty_with_gurobi'
+    cd "%SP_DIR%"
+    rename nifty nifty_with_gurobi
+)
+
+IF "%WITH_CPLEX%" == "1" (
+    REM Rename the nifty package to 'nifty_with_cplex'
+    cd "%SP_DIR%"
+    rename nifty nifty_with_cplex
+)
