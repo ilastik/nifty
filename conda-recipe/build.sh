@@ -178,7 +178,7 @@ make -j${CPU_COUNT}
 cp -r ${SRC_DIR}/build/python/nifty ${PREFIX}/lib/python${PY_VER}/site-packages/
 
 
-NIFTY_MODULE_SO=${PREFIX}/lib/python${PY_VER}/site-packages/nifty/_nifty.so
+NIFTY_MODULE_SO=`ls ${PREFIX}/lib/python${PY_VER}/site-packages/nifty/_nifty.*`
 
 ##
 ## Rename the python module entirely, and change cplex lib install names.
