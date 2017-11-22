@@ -38,7 +38,7 @@ IF "%WITH_GUROBI%" == "1" (
     rem set /p GUROBI_LIB=<gurobilib.tmp
 ) 
 
-IF "%WITH_CPLEX" == "1" (
+IF "%WITH_CPLEX%" == "1" (
     REM CPLEX is found automatically if installed. 
     REM No idea what happens with two CPLEXinstallations, but for now we don't care.
     SET OPTIMIZER_ARGS="-DWITH_CPLEX=ON"
