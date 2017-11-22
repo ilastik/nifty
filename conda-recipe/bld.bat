@@ -39,9 +39,7 @@ IF "%WITH_GUROBI%" == "1" (
 ) 
 
 IF "%WITH_CPLEX%" == "1" (
-    REM CPLEX is found automatically if installed. 
-    REM No idea what happens with two CPLEXinstallations, but for now we don't care.
-    SET OPTIMIZER_ARGS="-DWITH_CPLEX=ON"
+    SET OPTIMIZER_ARGS="-DWITH_CPLEX=ON -DCPLEX_ROOT_DIR=%CPLEX_ROOT_DIR%"
 )
 
 REM ----------------------------------------------------------------------
