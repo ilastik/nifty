@@ -30,16 +30,18 @@ IF "%WITH_GUROBI%" == "1" (
     REM if we build with Gurobi, we need to configure the paths.
     REM The GUROBI_ROOT_DIR should point to gurobiXYZ\win64
     ECHO "found gurobi lib %GUROBI_LIB_WIN%"
-    SET OPTIMIZER_ARGS=-DWITH_GUROBI=ON -DGUROBI_ROOT_DIR=%GUROBI_ROOT_DIR% ^
-      -DGUROBI_LIBRARY=%GUROBI_LIB_WIN% -DGUROBI_INCLUDE_DIR=%GUROBI_ROOT_DIR%\include ^
-      -DGUROBI_CPP_LIBRARY=%GUROBI_ROOT_DIR%\lib\gurobi_c++md2015.lib
+    :: ensure single double quotes with :"=
+    SET OPTIMIZER_ARGS=-DWITH_GUROBI=ON -DGUROBI_ROOT_DIR="%GUROBI_ROOT_DIR:"=%"" ^
+      -DGUROBI_LIBRARY=%GUROBI_LIB_WIN% -DGUROBI_INCLUDE_DIR="%GUROBI_ROOT_DIR:"=%\include" ^
+      -DGUROBI_CPP_LIBRARY="%GUROBI_ROOT_DIR:"=%\lib\gurobi_c++md2015.lib"
     rem set GUROBI_LIB=%%i
     rem dir "%GUROBI_ROOT_DIR%\lib\gurobi*.lib" /s/b|findstr gurobi[0-9][0-9].lib>gurobilib.tmp
     rem set /p GUROBI_LIB=<gurobilib.tmp
-) 
+)
 
 IF "%WITH_CPLEX%" == "1" (
-    SET OPTIMIZER_ARGS="-DWITH_CPLEX=ON -DCPLEX_ROOT_DIR=%CPLEX_ROOT_DIR%"
+    :: ensure single double quotes with :"=
+    SET OPTIMIZER_ARGS=-DWITH_CPLEX=ON -DCPLEX_ROOT_DIR="%CPLEX_ROOT_DIR:"=%"
 )
 
 REM ----------------------------------------------------------------------
