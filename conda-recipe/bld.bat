@@ -41,7 +41,7 @@ IF "%WITH_GUROBI%" == "1" (
 
 IF "%WITH_CPLEX%" == "1" (
     :: ensure single double quotes with :"=
-    SET OPTIMIZER_ARGS=-DWITH_CPLEX=ON -DCPLEX_ROOT_DIR="%CPLEX_ROOT_DIR:"=%"
+    SET OPTIMIZER_ARGS=-DWITH_CPLEX=ON -DCPLEX_ROOT_DIR=%CPLEX_ROOT_DIR% -DCPLEX_WIN_VERSION=%CPLEX_WIN_VERSION%
 )
 
 REM ----------------------------------------------------------------------
