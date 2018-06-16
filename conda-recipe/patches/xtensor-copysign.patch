@@ -1,5 +1,5 @@
---- a/xmath.hpp
-+++ b/xmath_patched.hpp
+--- Library/include/xtensor/xmath.hpp
++++ Library/include/xtensor/xmath.hpp
 @@ -266,7 +266,9 @@ INT_SPECIALIZATION_IMPL(FUNC_NAME, RETURN_VAL, unsigned long long);
          using std::arg;
  
