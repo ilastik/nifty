@@ -1,0 +1,13 @@
+--- a/xmath.hpp
++++ b/xmath_patched.hpp
+@@ -266,7 +266,9 @@ INT_SPECIALIZATION_IMPL(FUNC_NAME, RETURN_VAL, unsigned long long);
+         using std::arg;
+ 
+         using std::atan2;
+-        using std::copysign;
++        #if !defined(MSVC)
++            using std::copysign;
++        #endif
+         using std::fdim;
+         using std::fmax;
+         using std::fmin;
