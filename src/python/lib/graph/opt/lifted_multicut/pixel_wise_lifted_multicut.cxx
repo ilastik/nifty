@@ -67,13 +67,13 @@ namespace lifted_multicut{
                 xt::pytensor<uint64_t,  DIM> labels,
                 const bool verbose
             ){
-                // xt::xtensor<uint64_t, DIM> res;
+                xt::xtensor<uint64_t, DIM> res;
                 {
                     py::gil_scoped_release allowThreads;
-                    // res =  self.optimize(factory, labels, verbose);
-                    self.optimize(factory, labels, verbose);
+                    res =  self.optimize(factory, labels, verbose);
+                    // self.optimize(factory, labels, verbose);
                 }
-                // return res;
+                return res;
             },
                 py::arg("factory"),
                 py::arg("labels"),
@@ -119,25 +119,25 @@ namespace lifted_multicut{
                 xt::pytensor<uint64_t,  DIM> labels_a,
                 xt::pytensor<uint64_t,  DIM> labels_b
             ){
-                // xt::xtensor<uint64_t, DIM> res;
+                xt::xtensor<uint64_t, DIM> res;
                 {
                     py::gil_scoped_release allowThreads;
-                    // res =  self.fuse(labels_a, labels_b);
-                    self.fuse(labels_a, labels_b);
+                    res =  self.fuse(labels_a, labels_b);
+                    // self.fuse(labels_a, labels_b);
                 }
-                // return  res;
+                return  res;
             })
             .def("fuse",[](
                 CCFusionType & self,
                 xt::pytensor<uint64_t,  DIM+1> labels
             ){
-                // xt::xtensor<uint64_t, DIM> res;
+                xt::xtensor<uint64_t, DIM> res;
                 {
                     py::gil_scoped_release allowThreads;
-                    // res =  self.fuse(labels);
-                    self.fuse(labels);
+                    res =  self.fuse(labels);
+                    // self.fuse(labels);
                 }
-                // return res;
+                return res;
             })
 
         ;
