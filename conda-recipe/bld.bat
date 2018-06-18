@@ -67,7 +67,9 @@ cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
     -DWITH_QPBO=no
 
 rem apply xtensor patches
+echo %CD%
 git apply xtensor-copysign.patch
+git apply xtensor-sizet.patch
 
 cmake --build . --target ALL_BUILD --config %CONFIGURATION%
 if errorlevel 1 exit 1
