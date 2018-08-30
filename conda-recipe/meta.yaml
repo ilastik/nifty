@@ -37,7 +37,7 @@ source:
 
 build:
   number: 2
-  string: py{{py}}_{{PKG_BUILDNUM}}_g{{GIT_FULL_HASH[:7]}}
+  string: np{{CONDA_NPY}}py{{CONDA_PY}}_{{PKG_BUILDNUM}}_h{{PKG_HASH}}_g{{GIT_FULL_HASH[:7]}}
 
   script_env:
      - WITH_CPLEX
@@ -50,12 +50,12 @@ build:
 
 requirements:
   build:
-    - boost >=1.63.0
-    - python {{PY_VER}}*
-    - hdf5 >=1.8.17
-    - numpy {{NPY_VER}}*
+    - boost {{ boost }}
+    - python {{ python }}
+    - hdf5 {{ hdf5 }}
+    - numpy {{ numpy }}
     - xtensor 0.15.1
-    - xtensor-python 0.17*
+    - xtensor-python  0.17*
     {% if WITH_CPLEX is defined and WITH_CPLEX %}
     - cplex-shared # Need to make sure that cplex dylibs exist
     {% endif %}
@@ -66,11 +66,12 @@ requirements:
     {% endif %}
 
   run:
-    - boost >=1.63.0
-    - python {{PY_VER}}*
-    - hdf5 >=1.8.17
-    - numpy {{NPY_VER}}*
+    - boost
+    - python
+    - hdf5
+    - numpy
     - fastfilters
+    - libstdcxx-ng >={{ libstdcxxng }}  # [linux]
     - scikit-image
     - scipy
     - futures # [py2k]
