@@ -68,7 +68,7 @@ cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
 
 rem apply xtensor patches
 git apply ../conda-recipe/patches/xtensor-copysign.patch
-git apply ../conda-recipe/patches/xtensor-sizet.patch
+git apply ../conda-recipe/patches/xtensor-size_t.patch
 
 cmake --build . --target ALL_BUILD --config %CONFIGURATION%
 if errorlevel 1 exit 1
