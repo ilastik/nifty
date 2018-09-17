@@ -54,6 +54,7 @@ requirements:
     - python {{ python }}
     - hdf5 {{ hdf5 }}
     - numpy {{ numpy }}
+    - pybind11
     - vigra {{ vigra }}
     - xtensor 0.15.1
     - xtensor-python  0.17*
