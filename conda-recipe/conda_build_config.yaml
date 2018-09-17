@@ -8,9 +8,12 @@ numpy:
   - 1.12
 python:
   - 3.6
+vigra:
+  - 1.11
 
 pin_run_as_build:
   boost: x.x
   hdf5: x.x
   numpy: x.x
   python: x.x
+  vigra: x.x

@@ -54,6 +54,7 @@ requirements:
     - python {{ python }}
     - hdf5 {{ hdf5 }}
     - numpy {{ numpy }}
+    - vigra {{ vigra }}
     - xtensor 0.15.1
     - xtensor-python  0.17*
     {% if WITH_CPLEX is defined and WITH_CPLEX %}
@@ -74,6 +75,7 @@ requirements:
     - libstdcxx-ng >={{ libstdcxxng }}  # [linux]
     - scikit-image
     - scipy
+    - vigra
     - futures # [py2k]
 
     {% if WITH_CPLEX is defined and WITH_CPLEX %}
