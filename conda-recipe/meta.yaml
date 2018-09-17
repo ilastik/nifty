@@ -31,9 +31,9 @@ package:
 
 source:
   path: ../
-  patches:
-    # See https://github.com/ukoethe/vigra/issues/386
-    - patches/vigra-std-threading-detection.patch
+  # patches:
+  #   # See https://github.com/ukoethe/vigra/issues/386
+  #   - patches/vigra-std-threading-detection.patch
 
 build:
   number: 2
