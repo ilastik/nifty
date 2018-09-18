@@ -67,10 +67,10 @@ cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
     -DWITH_QPBO=no
 
 rem apply xtensor patches
-git apply ../conda-recipe/patches/xtensor-copysign.patch
+git apply --unsafe-paths ../conda-recipe/patches/xtensor-copysign.patch
 rem make sure that the patch was applied successfully
 if %errorlevel% neq 0 exit /b %errorlevel%
-git apply ../conda-recipe/patches/xtensor-size_t.patch
+git apply --unsafe-paths ../conda-recipe/patches/xtensor-size_t.patch
 rem make sure that the patch was applied successfully
 if %errorlevel% neq 0 exit /b %errorlevel%
 
