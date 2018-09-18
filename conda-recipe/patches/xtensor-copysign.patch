@@ -5,7 +5,7 @@
  
          using std::atan2;
 -        using std::copysign;
-+        #if !defined(MSVC)
++       #if !defined(_MSC_VER)
 +            using std::copysign;
 +        #endif
          using std::fdim;
