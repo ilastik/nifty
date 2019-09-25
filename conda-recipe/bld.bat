@@ -50,7 +50,9 @@ REM ----------------------------------------------------------------------
 
 set CONFIGURATION=Release
 
-cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
+cmake .. -G "NMake Makefiles" ^
+    -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
+    -DCMAKE_BUILD_TYPE=%CONFIGURATION% ^
     -DCMAKE_INSTALL_PREFIX="%LIBRARY_PREFIX%"  ^
     -DBOOST_ROOT="%LIBRARY%" ^
     -DCMAKE_CXX_FLAGS="-DBOOST_ALL_NO_LIB /EHsc" ^
@@ -66,9 +68,9 @@ cmake .. -G "%CMAKE_GENERATOR%" -DCMAKE_PREFIX_PATH="%LIBRARY_PREFIX%" ^
     -DWITH_LP_MP=no ^
     -DWITH_QPBO=no
 
-cmake --build . --target ALL_BUILD --config %CONFIGURATION%
+nmake all
 if errorlevel 1 exit 1
-cmake --build . --target INSTALL --config %CONFIGURATION%
+nmake install
 if errorlevel 1 exit 1
 
 
