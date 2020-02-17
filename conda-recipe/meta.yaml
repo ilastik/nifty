@@ -16,7 +16,6 @@ requirements:
   host:
     - python {{ python }}
     - boost-cpp {{ boost }}
-    - hdf5 {{ hdf5 }}
     - numpy {{ numpy }}
     - xtensor >=0.19,<0.20
     - xtensor-python >=0.22,<0.23
@@ -24,15 +23,15 @@ requirements:
     - blosc  # [not win]
     - bzip2  # [not win]
     - zlib  # [not win]
-    - z5py  # [not win]
+    - z5py {{ z5py }} # [not win]
     - vigra
     # - bzip2
 
   run:
     - python
     - {{ pin_compatible("boost-cpp") }}
-    - hdf5
     - {{ pin_compatible("numpy") }}
+    - {{ pin_compatible("z5py") }}
     - scikit-image
     - vigra
     - blosc  # [not win]
