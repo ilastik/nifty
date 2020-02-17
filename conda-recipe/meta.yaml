@@ -1,7 +1,6 @@
 
 package:
     name: nifty
-  {% endif %}
     version: v1.0.7
 
 source:
