@@ -7,7 +7,7 @@ source:
   path: ..
 
 build:
-  number: 6
+  number: 7
 
 requirements:
   build:
@@ -29,7 +29,6 @@ requirements:
 
   run:
     - python
-    - {{ pin_compatible("boost-cpp") }}
     - {{ pin_compatible("numpy") }}
     - {{ pin_compatible("z5py") }}
     - scikit-image
