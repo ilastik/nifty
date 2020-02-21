@@ -8,13 +8,24 @@ cd build
 ##
 ## Configure
 ##
+
+# Platform dependent flags. With z5py 2.0.5 there were problems building on mac and win
+if [[ `uname` == 'Darwin' ]];
+then
+    EXTRA_CMAKE_ARGS="DWITH_BLOSC=OFF"
+    EXTRA_CMAKE_ARGS="${EXTRA_CMAKE_ARGS} -DWITH_ZLIB=OFF"
+    EXTRA_CMAKE_ARGS="${EXTRA_CMAKE_ARGS} -DWITH_Z5=OFF"
+else
+    EXTRA_CMAKE_ARGS="DWITH_BLOSC=ON"
+    EXTRA_CMAKE_ARGS="${EXTRA_CMAKE_ARGS} -DWITH_ZLIB=ON"
+    EXTRA_CMAKE_ARGS="${EXTRA_CMAKE_ARGS} -DWITH_Z5=ON"
+fi
+
+
 cmake .. \
         -DBOOST_ROOT=${PREFIX} \
         -DBUILD_NIFTY_PYTHON=ON \
-        -DWITH_BLOSC=ON \
-        -DWITH_ZLIB=ON \
         -DWITH_BZIP2=OFF \
-        -DWITH_Z5=ON \
         -DWITH_HDF5=OFF \
 \
         -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS}" \

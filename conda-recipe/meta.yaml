@@ -7,7 +7,7 @@ source:
   path: ..
 
 build:
-  number: 7
+  number: 8
 
 requirements:
   build:
@@ -20,22 +20,21 @@ requirements:
     - xtensor >=0.19,<0.20
     - xtensor-python >=0.22,<0.23
     - nlohmann_json
-    - blosc  # [not win]
-    - bzip2  # [not win]
-    - zlib  # [not win]
-    - z5py {{ z5py }} # [not win]
+    - blosc  # [linux]
+    - bzip2  # [linux]
+    - zlib  # [linux]
+    - z5py {{ z5py }} # [linux]
     - vigra
-    # - bzip2
 
   run:
     - python
     - {{ pin_compatible("numpy") }}
-    - {{ pin_compatible("z5py") }}
+    - {{ pin_compatible("z5py") }}  # [linux]
     - scikit-image
     - vigra
-    - blosc  # [not win]
-    - bzip2  # [not win]
-    - zlib  # [not win]
+    - blosc  # [linux]
+    - bzip2  # [linux]
+    - zlib  # [linux]
 
 test:
     imports:

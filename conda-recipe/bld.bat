@@ -18,7 +18,7 @@ cmake .. -G "NMake Makefiles" ^
     -DBUILD_CPP_EXAMPLES=no ^
     -DWITH_GLPK=no ^
     -DWITH_HDF5=no ^
-    -DWITH_Z5=yes ^
+    -DWITH_Z5=no ^
     -DWITH_LP_MP=no ^
     -DWITH_QPBO=no
 
