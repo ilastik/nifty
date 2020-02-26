@@ -27,6 +27,7 @@ cmake .. \
         -DBUILD_NIFTY_PYTHON=ON \
         -DWITH_BZIP2=OFF \
         -DWITH_HDF5=OFF \
+        -DWITH_Z5=OFF \
 \
         -DCMAKE_SHARED_LINKER_FLAGS="${LDFLAGS}" \
         -DCMAKE_EXE_LINKER_FLAGS="${LDFLAGS}" \

@@ -27,7 +27,7 @@ requirements:
     - vigra
 
   run:
-    - python
+    - {{ pin_compatible("python") }}
     - {{ pin_compatible("numpy") }}
     - {{ pin_compatible("z5py") }}  # [linux]
     - scikit-image
