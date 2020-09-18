@@ -14,7 +14,7 @@ requirements:
     - cmake
     - {{ compiler("cxx")}}
   host:
-    - python {{ python }}
+    - python
     - boost-cpp {{ boost }}
     - numpy {{ numpy }}
     - xtensor >=0.19,<0.20
